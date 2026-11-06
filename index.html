@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#140908">
+<title>Excuse Court</title>
+<style>
+  :root {
+    --ink: #1a100c;
+    --cream: #f6efe2;
+    --gold: #e4c26a;
+    --gold-deep: #8a6420;
+    --wood: #6b3f1d;
+    --robe: #141414;
+    --guilty: #9d1c2b;
+    --acquit: #176b42;
+    --paper: #f4ead7;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    color: var(--cream);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    background:
+      radial-gradient(900px 420px at 50% -8%, #5a3028 0%, transparent 55%),
+      repeating-linear-gradient(90deg, #1c0e0c 0 18px, #140908 18px 36px);
+  }
+  main {
+    width: min(520px, 100%);
+    margin: 0 auto;
+    padding:
+      max(18px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right))
+      max(28px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+  header { text-align: center; }
+  .kicker {
+    margin: 0 0 6px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(40px, 11vw, 58px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    font-weight: 700;
+  }
+  .sub {
+    margin: 10px auto 0;
+    max-width: 36ch;
+    color: #f0dcb4;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+  .bench {
+    position: relative;
+    margin: 18px auto 8px;
+    height: 300px;
+  }
+  svg.judge {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 12px 0 rgba(0, 0, 0, 0.25));
+  }
+  .arm {
+    transform-box: view-box;
+    transform-origin: 248px 168px;
+    transform: rotate(-38deg);
+  }
+  .is-banging .arm {
+    animation: bang 0.62s cubic-bezier(.18, .7, .2, 1) forwards;
+  }
+  @keyframes bang {
+    0% { transform: rotate(-42deg); }
+    48% { transform: rotate(16deg); }
+    64% { transform: rotate(4deg); }
+    82% { transform: rotate(12deg); }
+    100% { transform: rotate(8deg); }
+  }
+  .is-banging {
+    animation: shake 0.48s linear 0.28s both;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0) rotate(0); }
+    15% { transform: translate(-7px, 2px) rotate(-0.6deg); }
+    30% { transform: translate(8px, -3px) rotate(0.7deg); }
+    45% { transform: translate(-6px, 1px) rotate(-0.4deg); }
+    60% { transform: translate(5px, -1px) rotate(0.3deg); }
+    75% { transform: translate(-3px, 1px); }
+  }
+  .wham {
+    position: absolute;
+    right: 6%;
+    top: 42%;
+    margin: 0;
+    font-family: Impact, "Arial Black", "Haettenschweiler", sans-serif;
+    font-size: 54px;
+    letter-spacing: 0.04em;
+    color: #ffdf6e;
+    -webkit-text-stroke: 2px #6e1420;
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(-14deg) scale(0.3);
+  }
+  .is-banging .wham {
+    animation: pop 0.55s ease-out 0.26s both;
+  }
+  @keyframes pop {
+    0% { opacity: 0; transform: rotate(-14deg) scale(0.3); }
+    25% { opacity: 1; transform: rotate(-8deg) scale(1.12); }
+    100% { opacity: 0; transform: rotate(-6deg) scale(1.35); }
+  }
+  form { margin-top: 4px; }
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    padding: 14px 14px 16px;
+    border: 3px solid var(--gold);
+    border-radius: 14px;
+    background: #241410;
+    color: var(--cream);
+    font: 16px/1.4 Georgia, "Palatino Linotype", Palatino, serif;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  textarea:focus {
+    outline: 3px solid #fff3c4;
+    outline-offset: 2px;
+  }
+  textarea::placeholder { color: #b7a28a; }
+  button {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    cursor: pointer;
+  }
+  button:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+  }
+  #bang, #share {
+    display: block;
+    width: 100%;
+    min-height: 60px;
+    margin-top: 12px;
+    border-radius: 14px;
+    border: 3px solid #fff1c2;
+    background: var(--gold);
+    color: #1a100c;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 0 var(--gold-deep);
+  }
+  #bang:active, #share:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 var(--gold-deep);
+  }
+  #bang:disabled {
+    cursor: wait;
+    filter: saturate(0.7);
+  }
+  #verdict {
+    margin-top: 18px;
+    padding: 18px 16px 16px;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 16px;
+    border: 4px solid #1a100c;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.35);
+  }
+  #verdict.slam {
+    animation: slam 0.42s cubic-bezier(.15, 1.25, .35, 1) both;
+  }
+  @keyframes slam {
+    0% { opacity: 0; transform: scale(1.18) rotate(-1.5deg); }
+    100% { opacity: 1; transform: none; }
+  }
+  .case {
+    margin: 0;
+    text-align: center;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6d5844;
+  }
+  .finds {
+    margin: 8px 0 4px;
+    text-align: center;
+    font-size: 15px;
+  }
+  .stamp {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 6px auto 12px;
+    padding: 2px 12px 4px;
+    border: 5px solid currentColor;
+    font-family: Impact, "Arial Black", "Haettenschweiler", sans-serif;
+    line-height: 1;
+    text-align: center;
+  }
+  .stamp.guilty {
+    color: var(--guilty);
+    font-size: clamp(46px, 14vw, 74px);
+    letter-spacing: 0.08em;
+    transform: rotate(-7deg);
+  }
+  .stamp.acquitted {
+    color: var(--acquit);
+    font-size: clamp(30px, 9vw, 52px);
+    letter-spacing: 0.04em;
+    transform: rotate(4deg);
+  }
+  .charge {
+    margin: 0 0 10px;
+    text-align: center;
+    font-size: 17px;
+    font-style: italic;
+    color: #4e3828;
+  }
+  .line {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .score-label {
+    margin: 16px 0 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6d5844;
+  }
+  .score {
+    margin: 2px 0 8px;
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .score span {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    letter-spacing: 0;
+  }
+  .meter {
+    height: 14px;
+    border-radius: 999px;
+    background: #e4d3b8;
+    border: 2px solid #1a100c;
+    overflow: hidden;
+  }
+  .meter i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--guilty);
+  }
+  .meter.mid i { background: #b57a12; }
+  .meter.high i { background: var(--acquit); }
+  #verdict.slam .meter i {
+    animation: fill 0.55s ease-out 0.12s both;
+  }
+  @keyframes fill {
+    from { width: 0; }
+  }
+  #copyNote, #manual {
+    margin: 10px 0 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    color: var(--gold);
+    text-align: center;
+  }
+  #manual {
+    white-space: pre-wrap;
+    text-align: left;
+    padding: 12px;
+    border-radius: 12px;
+    background: #241410;
+    color: var(--cream);
+    border: 2px solid var(--gold);
+  }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .arm, .is-banging, .is-banging .wham, #verdict.slam, #verdict.slam .meter i {
+      animation: none !important;
+    }
+    .is-banging .arm { transform: rotate(8deg); }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="kicker">Municipal docket of weak reasons</p>
+    <h1>Excuse Court</h1>
+    <p class="sub">The Honorable June Burden presiding. She has heard worse. Not often.</p>
+  </header>
+
+  <div class="bench" id="bench">
+    <p class="wham" aria-hidden="true">WHAM</p>
+    <svg class="judge" viewBox="0 0 400 320" role="img" aria-label="Cartoon judge raising a gavel">
+      <rect x="20" y="236" width="360" height="72" rx="10" fill="#6b3f1d"/>
+      <rect x="20" y="236" width="360" height="16" fill="#8d5728"/>
+      <rect x="40" y="292" width="18" height="22" fill="#4a2a12"/>
+      <rect x="342" y="292" width="18" height="22" fill="#4a2a12"/>
+      <rect x="308" y="208" width="58" height="30" rx="3" fill="#e6c98a" stroke="#3d2912" stroke-width="3"/>
+      <text x="200" y="274" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#f6e7c1" letter-spacing="1.5">HON. JUNE BURDEN</text>
+      <path d="M112 184c10-36 166-36 176 4l16 70H100z" fill="#161616"/>
+      <path d="M176 172l24 46 24-46" fill="none" stroke="#f4ead7" stroke-width="7" stroke-linejoin="round"/>
+      <circle cx="200" cy="112" r="54" fill="#f3c7a4"/>
+      <ellipse cx="148" cy="118" rx="11" ry="15" fill="#e5b08a"/>
+      <ellipse cx="252" cy="118" rx="11" ry="15" fill="#e5b08a"/>
+      <path d="M150 98c8-46 92-46 100 0-10-26-90-28-100 0z" fill="#f7f5f0"/>
+      <path d="M158 108c-8 18-4 40 4 48" fill="none" stroke="#f7f5f0" stroke-width="10" stroke-linecap="round"/>
+      <path d="M242 108c8 18 4 40-4 48" fill="none" stroke="#f7f5f0" stroke-width="10" stroke-linecap="round"/>
+      <path d="M164 100l30 12" stroke="#2b1c16" stroke-width="6" stroke-linecap="round"/>
+      <path d="M236 100l-30 12" stroke="#2b1c16" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="178" cy="122" r="16" fill="#fff"/>
+      <circle cx="222" cy="122" r="16" fill="#fff"/>
+      <circle cx="180" cy="123" r="4.5" fill="#1c120c"/>
+      <circle cx="224" cy="123" r="4.5" fill="#1c120c"/>
+      <circle cx="178" cy="122" r="16" fill="none" stroke="#1c1c1c" stroke-width="3"/>
+      <circle cx="222" cy="122" r="16" fill="none" stroke="#1c1c1c" stroke-width="3"/>
+      <path d="M194 122h12" stroke="#1c1c1c" stroke-width="3"/>
+      <path d="M200 128c-1 8 0 14 1 16" stroke="#c48968" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M174 156c18-16 34-16 52 0" stroke="#7a3034" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <g class="arm">
+        <path d="M246 164c28-6 52 10 62 34" stroke="#111" stroke-width="24" fill="none" stroke-linecap="round"/>
+        <path d="M300 196c12 10 16 26 12 38" stroke="#f3c7a4" stroke-width="14" fill="none" stroke-linecap="round"/>
+        <g transform="translate(306 228) rotate(-28)">
+          <rect x="-8" y="0" width="16" height="62" rx="7" fill="#3d2912"/>
+          <rect x="-30" y="-10" width="60" height="24" rx="6" fill="#7a4a22" stroke="#3d2912" stroke-width="2"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <form id="form">
+    <label for="excuse">State your excuse</label>
+    <textarea id="excuse" maxlength="400" placeholder="The dog ate my Wi-Fi, Your Honor, and the bus was emotionally unavailable."></textarea>
+    <button type="submit" id="bang">Bang the gavel</button>
+  </form>
+
+  <section id="verdict" hidden aria-live="polite">
+    <p class="case" id="caseNo"></p>
+    <p class="finds">The court finds this excuse</p>
+    <p class="stamp" id="stamp"></p>
+    <p class="charge" id="charge"></p>
+    <p class="line" id="line"></p>
+    <p class="score-label">Believability</p>
+    <p class="score" id="score"></p>
+    <div class="meter" id="meter"><i id="meterBar"></i></div>
+  </section>
+
+  <button type="button" id="share" hidden>Share this ruling</button>
+  <p id="copyNote" hidden></p>
+  <pre id="manual" hidden></pre>
+</main>
+<script>
+(function () {
+  var VERDICTS = [
+    { p: 40, ruling: "GUILTY", score: 8, keys: ["dog ate my homework", "dog ate", "my dog", "the dog"],
+      line: function (text) {
+        if (hit(text, "homework") || hit(text, "dog ate")) {
+          return "The dog ate your homework, and with it your right to a second draft. There are tooth marks on nothing. The dog walks. You do not. Sentence: detention, served as the truth.";
+        }
+        return "You called a dog as your star witness and the dog did not appear, which is the most dog thing this court has ever sustained. Guilty. Sentence: paws are not probable cause. Try a reason with a receipt.";
+      } },
+    { p: 20, ruling: "GUILTY", score: 17, keys: ["traffic", "gridlock", "bumper to bumper", "stuck on the highway", "stuck on the freeway", "fender bender", "road work", "roadwork"],
+      line: "You called a traffic jam an act of God. It was a Honda Civic and a calendar you treated as fan fiction. Guilty. Sentence: leave fifteen minutes earlier, which is not cruel, it is a clock." },
+    { p: 20, ruling: "GUILTY", score: 14, keys: ["snooze", "alarm clock", "the alarm", "my alarm", "overslept", "slept through", "slept in"],
+      line: "Nine snoozes. The court counted, because somebody had to. That alarm begged and you rolled over on it. Guilty. Sentence: morning, served without a negotiation." },
+    { p: 20, ruling: "GUILTY", score: 12, keys: ["wi-fi", "wifi", "internet", "the router", "my router", "no signal"],
+      line: "The router light was green. Green means guilty. You were not disconnected from the internet. You were disconnected from effort. Sentence: reboot yourself and try the excuse again." },
+    { p: 20, ruling: "ACQUITTED", score: 82, keys: ["the flu", "a fever", "my fever", "im sick", "i am sick", "feeling sick", "got sick", "throwing up", "threw up", "food poisoning came"],
+      line: "That cough just testified from the hallway, and it was not coached. Acquitted. Sentence: soup, a blanket, and keep your germs off my bench. The bench has enough problems." },
+    { p: 20, ruling: "ACQUITTED", score: 78, keys: ["flat tire", "flat tyre", "broke down", "car broke", "car wouldnt", "car would not", "wont start", "wouldnt start", "tow truck", "engine died", "dead car", "car battery", "stalled"],
+      line: "Your car died a tragic one-act on the shoulder. Machines do not perjure themselves. They just stop, dramatically, which this court respects. Acquitted. Sentence: call a tow, not a novelist." },
+    { p: 20, ruling: "GUILTY", score: 21, keys: ["double-booked", "double booked", "forgot the meeting", "missed the meeting", "on my calendar", "my calendar", "wrong day", "wrong meeting"],
+      line: "Your calendar called. It is exhausted from being the villain in a story where you never opened it. Guilty. Sentence: read the square with today’s date. It has been waving." },
+    { p: 20, ruling: "GUILTY", score: 11, keys: ["email", "e-mail", "emails", "inbox", "spam folder", "the spam"],
+      line: "It was not in spam. It was sitting in your inbox wearing a little bell since 9:14 a.m. Guilty. Sentence: scroll up. The truth has been patient, which is more than I am." },
+    { p: 20, ruling: "GUILTY", score: 5, keys: ["grandma", "grandmother", "nana", "granny", "meemaw", "my nana"],
+      line: "This is your grandmother’s fourth funeral in my courtroom, and this morning she texted the bailiff a pie recipe. Guilty. Sentence: strike Grandma from the witness list. She has suffered enough of you." },
+    { p: 20, ruling: "ACQUITTED", score: 7, keys: ["alien", "aliens", "abducted", "ufo", "mothership", "spaceship", "crop circle"],
+      line: "You were abducted, and yet you remembered every detail except the one a person could check. The mothership is outside my jurisdiction. Acquitted on a technicality. Sentence: next time bring a crop circle, not a paragraph." },
+    { p: 20, ruling: "ACQUITTED", score: 88, keys: ["my kid", "my kids", "the kids", "the baby", "my baby", "my son", "my daughter", "babysitter", "daycare", "school pickup", "pickup line", "childcare", "my child"],
+      line: "A small citizen with sticky hands overturned your afternoon, and the court recognizes the coup. Acquitted. Sentence: goldfish crackers outrank this docket. Survive them." },
+    { p: 20, ruling: "ACQUITTED", score: 90, keys: ["snowed in", "blizzard", "hurricane", "tornado", "ice storm", "black ice", "hailstorm", "flash flood", "whiteout", "thunderstorm", "cant drive in this"],
+      line: "The sky held you hostage and the radar is prepared to swear to it. Acquitted. Sentence: you may not punch a blizzard, and you may not drive into one for a standup that could have been an email I would also ignore." },
+    { p: 20, ruling: "GUILTY", score: 22, keys: ["phone died", "phone is dead", "dead phone", "phone battery", "forgot to charge", "no charger", "didnt charge", "phone was dead"],
+      line: "Your phone died because you treat outlets like a rumor spread by electricians. Guilty. Sentence: charge it, like an adult who has seen a wall and taken the hint." },
+    { p: 20, ruling: "ACQUITTED", score: 84, keys: ["the doctor", "my doctor", "a doctor", "hospital", "emergency room", "urgent care", "the clinic", "er visit"],
+      line: "A clipboard and a paper gown outrank your little calendar square. Acquitted. Sentence: go be poked. The court will still be here when you get back, disappointingly." },
+    { p: 20, ruling: "ACQUITTED", score: 80, keys: ["dentist", "root canal", "cavity", "dental"],
+      line: "Nobody forges a root canal. The pain is too specific and the bill is worse. Acquitted. Sentence: ice cream is denied. Floss is not a suggestion, it is the terms of your release." },
+    { p: 20, ruling: "ACQUITTED", score: 85, keys: ["wedding", "the bride", "the groom", "rehearsal dinner", "bachelor party", "bachelorette"],
+      line: "A wedding is custody with a DJ and an aunt who brought a microphone. Acquitted. Sentence: survive the chicken dance. No bouquet photos entered during the vows." },
+    { p: 20, ruling: "ACQUITTED", score: 86, keys: ["my flight", "the flight", "airport", "layover", "tsa", "gate change", "cancelled flight", "canceled flight", "delayed flight"],
+      line: "The airline delayed you and then charged you for the emotional-support pretzel. This court does not pile on. Acquitted. Sentence: gate whatever-it-is-now. May the middle seat show you mercy, because the airline will not." },
+    { p: 20, ruling: "ACQUITTED", score: 74, keys: ["food poisoning", "bad shrimp", "bad sushi", "spoiled food", "spoiled milk", "leftovers", "gas station sushi", "the taco", "a taco", "tacos"],
+      line: "The shrimp entered a guilty plea from the afterlife and took your afternoon with it. Acquitted. Sentence: hydrate. If you narrate round two near this bench, I will clear the courtroom for everyone’s sake." },
+    { p: 20, ruling: "ACQUITTED", score: 77, keys: ["migraine", "headache"],
+      line: "There is already a tiny judge banging a gavel behind your left eye. I yield to the superior court. Acquitted, and I am whispering it. Sentence: lights off, phone down, no heroics." },
+    { p: 20, ruling: "ACQUITTED", score: 89, keys: ["power outage", "blackout", "lost power", "no power", "the power went", "power went out", "no electricity", "lights went out"],
+      line: "The grid clocked out and took your obligations into the dark with it. Acquitted. Sentence: when the lights come back, so do you. Not a minute before, and not with a speech." },
+    { p: 20, ruling: "GUILTY", score: 34, keys: ["the train", "missed the train", "subway", "the bus", "missed the bus", "light rail", "the metro"],
+      line: function (text) {
+        var ride = "bus";
+        if (hit(text, "the train") || hit(text, "missed the train")) ride = "train";
+        else if (hit(text, "subway")) ride = "subway";
+        else if (hit(text, "light rail")) ride = "light rail";
+        else if (hit(text, "the metro")) ride = "metro";
+        return "The " + ride + " is late the way water is wet. You built a defense on a schedule the whole city already memorized, then acted shocked. Guilty. Sentence: one earlier " + ride + ". Zero speeches from the platform.";
+      } },
+    { p: 20, ruling: "GUILTY", score: 28, keys: ["printer", "toner", "paper jam", "printer jammed"],
+      line: "That printer jammed because it sensed weakness, and honestly I understand the printer. Guilty. Sentence: unjam it while the gallery watches. Paper tray. Now." },
+    { p: 20, ruling: "GUILTY", score: 16, keys: ["on zoom", "zoom call", "on mute", "i was muted", "unmuted", "webcam", "camera was off", "google meet", "teams meeting", "on teams"],
+      line: "You were not on mute. The crunch was entered in stereo and the gallery has already identified the pretzels. Guilty. Sentence: mute is a button, not a lifestyle." },
+    { p: 20, ruling: "GUILTY", score: 31, keys: ["password", "locked out", "logged out", "2fa", "two-factor", "cant log", "cannot log", "couldnt log", "login"],
+      line: "You forgot a password you have reset so often it has a therapist and a favorite chair. Guilty. Sentence: write it down somewhere that is not a sticky note on the webcam. The webcam watched you write the sticky note." },
+    { p: 20, ruling: "ACQUITTED", score: 58, keys: ["my cat", "the cat", "kitten", "the kitten"],
+      line: "The cat walked across the keyboard and then shoved a water glass off the record out of principle. Acquitted, because I will not cross-examine a cat on television and lose. Sentence: the cat is clerk of court until further notice." },
+    { p: 20, ruling: "GUILTY", score: 18, keys: ["laundry", "the washer", "the dryer", "laundromat", "washing clothes"],
+      line: "Laundry is not an act of God. It is a basket you have been in mediation with since Sunday, and the basket is winning. Guilty. Sentence: fold one shirt. Call it a settlement." },
+    { p: 20, ruling: "ACQUITTED", score: 81, keys: ["moving day", "the movers", "u-haul", "uhaul", "moving truck", "packing boxes", "carried a couch", "the couch"],
+      line: "Nobody invents a couch on a staircase for fun. The drywall already gave a statement. Acquitted. Sentence: one dramatic sigh, sustained. Then you will label a box correctly, unlike last time." },
+    { p: 20, ruling: "ACQUITTED", score: 94, keys: ["jury duty", "jury summons", "summoned for jury", "im a juror", "i am a juror"],
+      line: "You cannot skip this court because another court called dibs. That paradox has a parking garage and a sad vending machine. Acquitted. Sentence: sit up. Their judge does not have my warmth, and I am not warm." },
+    { p: 20, ruling: "ACQUITTED", score: 83, keys: ["covid", "quarantine", "tested positive", "exposed to"],
+      line: "The test gets the last word, and it did not stutter. Acquitted from a respectful distance. Sentence: stay home. This gavel has been sanitized down to a blunt instrument with trust issues." },
+    { p: 20, ruling: "GUILTY", score: 13, keys: ["spilled coffee", "spilled my coffee", "coffee spill", "spilled a latte", "my latte", "the latte"],
+      line: "You spilled a latte on your responsibilities and called it the plot. That is a confession in a paper cup. Guilty. Sentence: napkins, accountability, and fewer adjectives about the foam." },
+    { p: 20, ruling: "GUILTY", score: 15, keys: ["the gym", "at the gym", "leg day", "workout", "my workout", "too sore", "sore from the gym", "personal trainer"],
+      line: "You cited leg day. The court cites your gym bag, which contains a banana and a dream you have not visited. Guilty. Sentence: twenty actual minutes, or retire the vocabulary." },
+    { p: 20, ruling: "ACQUITTED", score: 62, keys: ["broke up", "breakup", "break up", "my ex", "the ex", "dumped me", "got dumped"],
+      line: "Heartbreak showed up looking like the entire exhibit file, coffee stain included. Acquitted on compassionate grounds this court will deny in writing. Sentence: nobody texts the ex from the parking lot of this case." },
+    { p: 20, ruling: "ACQUITTED", score: 91, keys: ["plumber", "landlord", "burst pipe", "the pipe", "pipe burst", "flooded", "a leak", "the leak", "no water", "water heater", "ceiling leak"],
+      line: "A pipe burst and the ceiling filed its own complaint against you. That is a hostile witness with excellent pressure. Acquitted. Sentence: buckets today. A plumber before my next headache, which you are approaching." },
+    { p: 20, ruling: "ACQUITTED", score: 70, keys: ["my computer", "the computer", "laptop", "blue screen", "hard drive", "pc crashed", "computer crashed", "it crashed"],
+      line: "Your computer crashed like it wanted a spin-off and a sadder soundtrack. The spinning wheel of death is sworn in. Acquitted. Sentence: reboot, then save your work like the crash already happened, because it is loading." },
+    { p: 20, ruling: "GUILTY", score: 24, keys: ["my brother", "my sister", "my sibling", "little brother", "little sister"],
+      line: "You blamed your sibling, the oldest motion in this building, older than the paneling and less convincing. Guilty. Sentence: birth order is not a defense. It is barely an anecdote. Sit down." },
+    { p: 20, ruling: "GUILTY", score: 6, keys: ["nightmare", "bad dream", "in my dream", "i dreamed", "i dreamt"],
+      line: "You had a dream. I have a gavel. Only one of those is evidence, and it is the wooden one. Guilty. Sentence: keep your subconscious off my docket. It does not have standing or slacks." },
+    { p: 20, ruling: "GUILTY", score: 27, keys: ["time zone", "timezone", "daylight saving", "daylight savings", "jet lag", "jetlag", "forgot the time", "wrong time"],
+      line: "The clocks changed for the entire time zone, including people who still showed up and made eye contact. Guilty. Sentence: learn which way spring goes. It is once a year, not a riddle." },
+    { p: 20, ruling: "ACQUITTED", score: 55, keys: ["a bear", "the bear", "moose", "raccoon", "coyote", "possum", "opossum", "wild turkey", "a skunk", "the skunk"],
+      line: "You lost an argument to a raccoon and I have no follow-up questions. That is precedent. Acquitted. Sentence: surrender the trash can. Dignity left with the raccoon, in a bag, at speed." },
+    { p: 14, ruling: "GUILTY", score: 13, keys: ["procrastinating", "procrastinate", "procrastinated", "the deadline", "my homework", "the homework", "the assignment", "my assignment", "lost track of"],
+      line: "The deadline did not sneak up. It walked in wearing a name tag and you offered it a drink. Guilty. Sentence: start the work before the work opens a case, because the work has a better lawyer." },
+    { p: 10, ruling: "GUILTY", score: 26, keys: ["running late", "im late", "i am late", "was late", "showed up late", "got there late", "late again"],
+      line: "You are late, which the court already knew, because you are standing here explaining it instead of having been there. Guilty. Sentence: the story is not a time machine. Leave earlier than your personality prefers." }
+  ];
+
+  var DEFAULTS = [
+    function (clip) {
+      return "You put \u201C" + clip + "\u201D on the record like it was going to grow up and become a fact. It did not. Guilty. Sentence: add one detail a stranger could check, or stop wasting the wood paneling.";
+    },
+    function (clip) {
+      return "The court replayed \u201C" + clip + "\u201D twice. The balcony laughed both times, and the balcony is usually on its phone. Guilty. Sentence: bring a receipt, a witness, or a lie with better posture.";
+    },
+    function (clip) {
+      return "\u201C" + clip + "\u201D is a mood board, not a defense. I have acquitted a parking meter with tighter logic. Guilty. Sentence: rewrite it until the bailiff stops smiling at me.";
+    },
+    function (clip) {
+      return "Order. \u201C" + clip + "\u201D is entered as Exhibit Vague, and the exhibit is sweating. Guilty. Sentence: one specific noun. Your Honor is waiting, which she is not known for.";
+    }
+  ];
+
+  var form = document.getElementById("form");
+  var excuseEl = document.getElementById("excuse");
+  var bangBtn = document.getElementById("bang");
+  var bench = document.getElementById("bench");
+  var verdictEl = document.getElementById("verdict");
+  var shareBtn = document.getElementById("share");
+  var copyNote = document.getElementById("copyNote");
+  var manual = document.getElementById("manual");
+  var timer = 0;
+  var lastShare = "";
+
+  function hash(s) {
+    var h = 2166136261;
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function norm(s) {
+    return s.toLowerCase().replace(/[\u2019\u2018]/g, "'").replace(/'/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  function escapeReg(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function hit(text, key) {
+    return new RegExp("(?:^|\\b)" + escapeReg(key) + "(?:\\b|$)").test(text);
+  }
+
+  function clipOf(raw) {
+    var t = raw.replace(/\s+/g, " ").trim();
+    if (t.length <= 110) return t;
+    var cut = t.slice(0, 107);
+    var sp = cut.lastIndexOf(" ");
+    return (sp > 60 ? cut.slice(0, sp) : cut) + "\u2026";
+  }
+
+  function believability(base, h) {
+    var j = (h % 9) - 4;
+    return Math.max(3, Math.min(97, base + j));
+  }
+
+  function judge(raw) {
+    var trimmed = raw.replace(/\s+/g, " ").trim();
+    if (!trimmed) {
+      return {
+        ruling: "GUILTY",
+        score: 1,
+        charge: "(silence)",
+        line: "You approached this bench with nothing in your mouth but confidence. That is not an excuse. That is a vacancy. Guilty. Sentence: contempt, and a do-over that contains a noun.",
+        excuse: ""
+      };
+    }
+    var text = norm(trimmed);
+    var h = hash(text);
+    var best = null;
+    var bestRank = -1;
+    for (var i = 0; i < VERDICTS.length; i++) {
+      var v = VERDICTS[i];
+      var sum = 0;
+      var longest = 0;
+      var matched = false;
+      for (var k = 0; k < v.keys.length; k++) {
+        if (hit(text, v.keys[k])) {
+          matched = true;
+          sum += v.keys[k].length;
+          if (v.keys[k].length > longest) longest = v.keys[k].length;
+        }
+      }
+      if (!matched) continue;
+      var rank = v.p * 100000 + longest * 100 + sum;
+      if (rank > bestRank) {
+        bestRank = rank;
+        best = v;
+      }
+    }
+    var clip = clipOf(trimmed);
+    if (!best) {
+      return {
+        ruling: "GUILTY",
+        score: 8 + (h % 18),
+        charge: "\u201C" + clip + "\u201D",
+        line: DEFAULTS[h % DEFAULTS.length](clip),
+        excuse: trimmed,
+        h: h
+      };
+    }
+    return {
+      ruling: best.ruling,
+      score: believability(best.score, h),
+      charge: "\u201C" + clip + "\u201D",
+      line: typeof best.line === "function" ? best.line(text) : best.line,
+      excuse: trimmed,
+      h: h
+    };
+  }
+
+  function caseNumber(seed) {
+    return "EC-" + (1000 + (seed % 9000));
+  }
+
+  function shareText(result) {
+    var shown = result.excuse || "(silence)";
+    return [
+      "EXCUSE COURT",
+      "Case " + result.caseNo,
+      "Hon. June Burden presiding",
+      "",
+      "Excuse: \u201C" + shown + "\u201D",
+      "",
+      "VERDICT: " + result.ruling,
+      result.line,
+      "",
+      "Believability: " + result.score + "/100"
+    ].join("\n");
+  }
+
+  function show(result) {
+    result.caseNo = caseNumber(result.h || hash(result.line));
+    document.getElementById("caseNo").textContent = "Case " + result.caseNo;
+    var stamp = document.getElementById("stamp");
+    stamp.textContent = result.ruling;
+    stamp.className = "stamp " + result.ruling.toLowerCase();
+    document.getElementById("charge").textContent = result.charge;
+    document.getElementById("line").textContent = result.line;
+    document.getElementById("score").innerHTML = result.score + "<span>/100</span>";
+    var meter = document.getElementById("meter");
+    meter.className = "meter " + (result.score >= 67 ? "high" : result.score >= 40 ? "mid" : "low");
+    var bar = document.getElementById("meterBar");
+    bar.style.width = result.score + "%";
+    verdictEl.hidden = false;
+    verdictEl.classList.remove("slam");
+    void verdictEl.offsetWidth;
+    verdictEl.classList.add("slam");
+    shareBtn.hidden = false;
+    copyNote.hidden = true;
+    manual.hidden = true;
+    lastShare = shareText(result);
+    shareBtn.textContent = "Share this ruling";
+    bangBtn.disabled = false;
+    bangBtn.textContent = "Rule again";
+    verdictEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
+  }
+
+  function thud() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!thud.ctx) thud.ctx = new AC();
+    var ctx = thud.ctx;
+    if (ctx.state === "suspended") ctx.resume();
+    var t = ctx.currentTime;
+    var len = Math.floor(ctx.sampleRate * 0.12);
+    var buffer = ctx.createBuffer(1, len, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+    var noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    var filter = ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 380;
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.55, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(t);
+    var osc = ctx.createOscillator();
+    var g2 = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(150, t);
+    osc.frequency.exponentialRampToValueAtTime(42, t + 0.11);
+    g2.gain.setValueAtTime(0.4, t);
+    g2.gain.exponentialRampToValueAtTime(0.01, t + 0.14);
+    osc.connect(g2);
+    g2.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.15);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var result = judge(excuseEl.value);
+    clearTimeout(timer);
+    bangBtn.disabled = true;
+    bench.classList.remove("is-banging");
+    void bench.offsetWidth;
+    bench.classList.add("is-banging");
+    if (!reduce) thud();
+    timer = setTimeout(function () { show(result); }, reduce ? 40 : 700);
+  });
+
+  function markCopied() {
+    shareBtn.textContent = "Copied to the record";
+    copyNote.hidden = false;
+    copyNote.textContent = "Copied. The group chat may now deliberate.";
+    manual.hidden = true;
+  }
+
+  function syncCopy(text) {
+    var area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.top = "0";
+    area.style.left = "0";
+    area.style.fontSize = "16px";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.focus();
+    area.select();
+    area.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+    document.body.removeChild(area);
+    return ok;
+  }
+
+  shareBtn.addEventListener("click", function () {
+    if (!lastShare) return;
+    var done = false;
+    function succeed() {
+      if (done) return;
+      done = true;
+      markCopied();
+    }
+    function giveUp() {
+      if (done) return;
+      done = true;
+      manual.hidden = false;
+      manual.textContent = lastShare;
+      copyNote.hidden = false;
+      copyNote.textContent = "Clipboard blocked. The ruling is below. Hold it and copy, counselor.";
+    }
+    var synced = syncCopy(lastShare);
+    if (synced) succeed();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastShare).then(succeed).catch(function () {
+        if (!synced) giveUp();
+      });
+    } else if (!synced) {
+      giveUp();
+    }
+  });
+})();
+</script>
+</body>
+</html>
