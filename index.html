@@ -103,7 +103,7 @@
   .scene svg { display: block; width: 100%; height: 100%; }
   .flash {
     position: absolute; inset: 0; pointer-events: none; opacity: 0;
-    background: radial-gradient(circle at 90% 74%, rgba(255, 240, 200, 0.85), rgba(255, 200, 120, 0.2) 35%, transparent 65%);
+    background: radial-gradient(circle at 19% 78%, rgba(255, 240, 200, 0.85), rgba(255, 200, 120, 0.2) 35%, transparent 65%);
     mix-blend-mode: screen;
   }
   .caption {
@@ -119,51 +119,12 @@
   }
   .caption.on { opacity: 1; transform: translate(-50%, 0); }
 
-  /* judge parts */
-  .judge-svg * { transform-box: fill-box; }
-  .breathe { animation: breathe 4.2s ease-in-out infinite; transform-box: view-box !important; transform-origin: 200px 290px; }
-  @keyframes breathe { 50% { transform: translateY(1.4px) scaleY(0.996); } }
-  .lid { transform-origin: center top; transform: scaleY(0); }
-  .blink .lid { transform: scaleY(1); }
-  .pupils { transition: transform .35s cubic-bezier(.3,.7,.3,1); }
-  [data-look=down] .pupils { transform: translate(-1.5px, 2.4px); }
-  [data-look=left] .pupils { transform: translate(-2.6px, 0.5px); }
-  [data-look=right] .pupils { transform: translate(2.6px, 0.5px); }
-  .deliberating .pupils { animation: scan 0.9s ease-in-out infinite; }
-  @keyframes scan { 0%, 100% { transform: translate(-2.6px, 2px); } 50% { transform: translate(2.6px, 2px); } }
-  .brow { transition: transform .3s cubic-bezier(.3,.7,.3,1); transform-origin: center; }
-  [data-mood=reading] .brow-r { transform: translateY(-2.5px) rotate(-6deg); }
-  .deliberating .brow-l { transform: translateY(1.5px) rotate(8deg); }
-  .deliberating .brow-r { transform: translateY(1.5px) rotate(-8deg); }
-  [data-mood=guilty] .brow-l { transform: translateY(2.5px) rotate(16deg); }
-  [data-mood=guilty] .brow-r { transform: translateY(2.5px) rotate(-16deg); }
-  [data-mood=acquitted] .brow-l { transform: translateY(1px) rotate(4deg); }
-  [data-mood=acquitted] .brow-r { transform: translateY(-4px) rotate(-10deg); }
-  .mouth { opacity: 0; transition: opacity .15s; }
-  [data-mood=idle] .m-flat, [data-mood=reading] .m-flat,
-  [data-mood=guilty] .m-frown, [data-mood=acquitted] .m-smirk { opacity: 1; }
-  .head { transform-box: view-box !important; transform-origin: 200px 200px; transition: transform .5s cubic-bezier(.3,.7,.3,1); }
-  [data-mood=reading] .head { transform: rotate(-3deg) translateY(2px); }
-  .deliberating .head { transform: translateY(3px) rotate(2deg); }
-  [data-mood=guilty] .head { transform: translateY(1px); }
-  [data-mood=acquitted] .head { transform: rotate(-4deg); }
-  .glint { transform: translateX(-30px); opacity: 0; }
-  .deliberating .glint { animation: glint 1.2s ease-in-out .2s; }
-  @keyframes glint { 0% { transform: translateX(-30px); opacity: 0; } 30% { opacity: .9; } 100% { transform: translateX(36px); opacity: 0; } }
-
-  .arm { transform-box: view-box !important; transform-origin: 276px 266px; transform: rotate(-62deg); transition: transform .4s cubic-bezier(.3,.7,.3,1); }
-  .deliberating .arm { transform: rotate(-70deg); }
-  .banging .arm { animation: bang 1.15s cubic-bezier(.25,.6,.3,1) forwards; }
-  @keyframes bang {
-    0% { transform: rotate(-70deg); }
-    16% { transform: rotate(0deg); }
-    28% { transform: rotate(-30deg); }
-    42% { transform: rotate(0deg); }
-    56% { transform: rotate(-80deg); }
-    76% { transform: rotate(1deg); }
-    84% { transform: rotate(-4deg); }
-    100% { transform: rotate(0deg); }
-  }
+  /* judge poses */
+  .breathe { animation: breathe 4.2s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 290px; }
+  @keyframes breathe { 50% { transform: translateY(1.2px) scaleY(0.997); } }
+  .pose { opacity: 0; }
+  [data-pose=idle] .p-idle, [data-pose=blink] .p-blink, [data-pose=reading] .p-reading,
+  [data-pose=strike] .p-strike, [data-pose=guilty] .p-guilty, [data-pose=acquitted] .p-acquitted { opacity: 1; }
   .lampglow { transition: opacity .2s; }
   .flicker .lampglow { animation: flicker .5s steps(1) both; }
   @keyframes flicker { 0% { opacity: 1.3; } 20% { opacity: .55; } 40% { opacity: 1.1; } 60% { opacity: .8; } 100% { opacity: 1; } }
@@ -176,7 +137,7 @@
     60% { transform: translate(4px, -1px); }
     80% { transform: translate(-2px, 1px); }
   }
-  .dust circle { animation: dust .7s cubic-bezier(.2,.7,.3,1) forwards; transform-box: view-box !important; }
+  .dust circle { animation: dust .7s cubic-bezier(.2,.7,.3,1) forwards; transform-box: view-box; }
   @keyframes dust { from { transform: translate(0, 0); opacity: .95; } to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
   .flash.go { animation: flash .5s ease-out both; }
   @keyframes flash { 0% { opacity: .9; } 100% { opacity: 0; } }
@@ -358,7 +319,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
-    .breathe, .deliberating .pupils { animation: none !important; }
+    .breathe { animation: none !important; }
   }
 </style>
 </head>
@@ -374,7 +335,7 @@
   <div class="left">
   <div class="stage" id="stage">
     <div class="scene" id="scene">
-      <svg class="judge-svg" id="judge" viewBox="0 28 400 372" role="img" aria-label="Judge June Burden at her bench, gavel raised" data-mood="idle" data-look="">
+      <svg class="judge-svg" id="judge" viewBox="0 28 400 372" role="img" aria-label="Judge June Burden at her bench, gavel raised" data-pose="idle">
         <defs>
           <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b1c10"/><stop offset="1" stop-color="#1c0c06"/></linearGradient>
           <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2414"/><stop offset="1" stop-color="#2a130a"/></linearGradient>
@@ -435,120 +396,10 @@
           </text>
         </g>
 
-        <!-- judge -->
-        <g class="breathe">
-          <!-- robe -->
-          <path d="M112 300C114 240 148 212 186 204h28c38 8 72 36 74 96z" fill="url(#robe)"/>
-          <path d="M160 238q-8 30-10 62M240 238q8 30 10 62M200 236v64" stroke="#fff" stroke-opacity=".05" stroke-width="3" fill="none"/>
-          <path d="M178 206l22 44 22-44" fill="#0a0a0d"/>
-          <path d="M172 222c-10 4-22 16-28 30-4 10-6 20-4 28l18 0c0-8 2-18 6-26 4-8 10-14 16-18z" fill="url(#sleeveUp)" stroke="#2c2a33" stroke-width="1.2"/>
-          <path d="M156 236q-12 18-10 34" stroke="#fff" stroke-opacity=".06" stroke-width="4" fill="none" stroke-linecap="round"/>
-          <!-- neck + jabot -->
-          <path d="M188 192h24v20h-24z" fill="#d9a07e"/>
-          <g fill="#fbf8f1" stroke="#cfc6b6" stroke-width="1">
-            <path d="M184 206q16 8 32 0l-6 22q-10 5-20 0z"/>
-            <path d="M188 224q12 6 24 0l-4 18q-8 4-16 0z"/>
-          </g>
-          <g fill="#fbf8f1" stroke="#cfc6b6" stroke-width=".8">
-            <circle cx="191" cy="228" r="2.4"/><circle cx="196" cy="230" r="2.4"/><circle cx="200" cy="230.5" r="2.4"/><circle cx="204" cy="230" r="2.4"/><circle cx="209" cy="228" r="2.4"/>
-            <circle cx="193" cy="243" r="2"/><circle cx="197" cy="244.5" r="2"/><circle cx="201" cy="244.8" r="2"/><circle cx="205" cy="243.5" r="2"/>
-          </g>
-
-          <g class="head">
-            <!-- hair back + bun -->
-            <circle cx="200" cy="104" r="19" fill="url(#hair)"/>
-            <path d="M190 100q10-8 20 0" stroke="#bdb8b0" stroke-width="1.5" fill="none"/>
-            <path d="M156 168c-8-34 6-56 44-58 38 2 52 24 44 58z" fill="url(#hair)"/>
-            <!-- ears -->
-            <ellipse cx="159" cy="160" rx="7" ry="11" fill="#e2a885"/>
-            <ellipse cx="241" cy="160" rx="7" ry="11" fill="#e2a885"/>
-            <circle cx="159" cy="170" r="2.4" fill="url(#gold)"/>
-            <circle cx="241" cy="170" r="2.4" fill="url(#gold)"/>
-            <!-- face -->
-            <ellipse cx="200" cy="158" rx="40" ry="45" fill="url(#skin)"/>
-            <!-- hairline -->
-            <path d="M160 150c2-26 18-36 40-36s38 10 40 36c-6-16-20-22-34-20-6-6-20-8-30 0-8 2-14 10-16 20z" fill="url(#hair)"/>
-            <path d="M176 126q14-6 28 2" stroke="#bdb8b0" stroke-width="1.2" fill="none"/>
-            <!-- wrinkles + cheeks -->
-            <path d="M184 135q16-4 32 0M188 129q12-3 24 0" stroke="#b9785a" stroke-opacity=".35" stroke-width="1.2" fill="none"/>
-            <circle cx="176" cy="178" r="9" fill="#e07a70" opacity=".22"/>
-            <circle cx="224" cy="178" r="9" fill="#e07a70" opacity=".22"/>
-            <path d="M184 178q-4 10 2 18M216 178q4 10-2 18" stroke="#b9785a" stroke-opacity=".4" stroke-width="1.2" fill="none"/>
-            <!-- eyes -->
-            <g>
-              <ellipse cx="184" cy="153" rx="8" ry="5.6" fill="#fffdf8"/>
-              <ellipse cx="216" cy="153" rx="8" ry="5.6" fill="#fffdf8"/>
-              <g class="pupils" fill="#2a1a12">
-                <circle cx="185" cy="153.6" r="3.6"/><circle cx="217" cy="153.6" r="3.6"/>
-                <circle cx="186.2" cy="152.2" r="1.1" fill="#fff"/><circle cx="218.2" cy="152.2" r="1.1" fill="#fff"/>
-              </g>
-              <path d="M176 152q8-6 16 0" stroke="#8a5038" stroke-width="1.6" fill="none"/>
-              <path d="M208 152q8-6 16 0" stroke="#8a5038" stroke-width="1.6" fill="none"/>
-              <g class="lid" fill="#e4ad89"><ellipse cx="184" cy="153" rx="8.6" ry="6.2"/><ellipse cx="216" cy="153" rx="8.6" ry="6.2"/></g>
-            </g>
-            <!-- brows -->
-            <path class="brow brow-l" d="M173 143q10-6 20-2" stroke="#e9e6e0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <path class="brow brow-r" d="M207 141q10-4 20 2" stroke="#e9e6e0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <!-- nose -->
-            <path d="M200 152q-6 18-3 24q4 3 9 0" stroke="#b8775a" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <ellipse cx="203" cy="172" rx="6" ry="3" fill="#d9926e" opacity=".35"/>
-            <!-- half-moon glasses -->
-            <g>
-              <path d="M170 162h27a13.5 11 0 0 1-27 0z" fill="#fff" fill-opacity=".14" stroke="url(#gold)" stroke-width="2"/>
-              <path d="M203 162h27a13.5 11 0 0 1-27 0z" fill="#fff" fill-opacity=".14" stroke="url(#gold)" stroke-width="2"/>
-              <path d="M197 163q3-3 6 0" stroke="url(#gold)" stroke-width="1.8" fill="none"/>
-              <path d="M170 163l-11-5M230 163l11-5" stroke="url(#gold)" stroke-width="1.6"/>
-              <g class="glint"><path d="M178 163l6 0-5 9-5 0z M211 163l6 0-5 9-5 0z" fill="#fff" opacity=".85"/></g>
-            </g>
-            <!-- mouths -->
-            <path class="mouth m-flat" d="M187 189q13 1.5 26 0" stroke="#8a3a36" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <path class="mouth m-frown" d="M186 193q14-9 28 0" stroke="#8a3a36" stroke-width="3.2" fill="none" stroke-linecap="round"/>
-            <path class="mouth m-smirk" d="M188 190q14 4 25-5" stroke="#8a3a36" stroke-width="3" fill="none" stroke-linecap="round"/>
-          </g>
-
-          <!-- gavel arm: robe sleeve bent at the elbow, fist around the handle -->
-          <g>
-            <path d="M232 206c14-4 30 2 38 14 10 14 18 30 22 42 2 8-4 16-16 18-12 2-22-4-26-12-6-14-14-28-24-40-6-8-4-18 6-22z" fill="url(#sleeveUp)" stroke="#2c2a33" stroke-width="1.2"/>
-            <path d="M250 222c8 10 14 22 18 34M240 228c6 9 11 19 14 30" stroke="#fff" stroke-opacity=".07" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-            <path d="M262 264c6 6 14 8 22 6" stroke="#000" stroke-opacity=".35" stroke-width="2" fill="none" stroke-linecap="round"/>
-          </g>
-          <g class="arm">
-            <g transform="translate(276 266)">
-              <!-- forearm sleeve, flaring to a bell cuff -->
-              <path d="M-14-15C2-17 18-19 34-22 38-22 40-20 41-17L44 17C43 20 40 21 36 21 20 19 4 17-14 15-24 12-25-12-14-15z" fill="url(#sleeveFore)" stroke="#2c2a33" stroke-width="1.2"/>
-              <path d="M4-12C14-13 24-15 32-17M8 4C18 5 26 6 34 8M2 11C14 12 24 13 36 15" stroke="#fff" stroke-opacity=".08" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-              <path d="M18-17q2 18-2 35" stroke="#000" stroke-opacity=".3" stroke-width="1.6" fill="none"/>
-              <ellipse cx="42" cy="0" rx="4.5" ry="19" fill="#050507"/>
-              <path d="M40-12q4 12 0 24" stroke="#f4efe4" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <!-- gavel: handle runs through the fist, head at the far end -->
-              <rect x="40" y="-7.2" width="48" height="6.4" rx="3" fill="url(#gavelWood)"/>
-              <rect x="74" y="-8" width="3" height="8" rx="1" fill="url(#gold)"/>
-              <g>
-                <rect x="82" y="-21" width="19" height="32" rx="4" fill="url(#gavelWood)" stroke="#2a1406" stroke-width="1.2"/>
-                <ellipse cx="91.5" cy="-20.5" rx="9.5" ry="2.2" fill="#b0703a" stroke="#2a1406" stroke-width=".8"/>
-                <rect x="82" y="-15.5" width="19" height="2.6" fill="url(#gold)"/>
-                <rect x="82" y="4" width="19" height="2.6" fill="url(#gold)"/>
-                <path d="M86-17v24" stroke="#fff" stroke-opacity=".18" stroke-width="2" stroke-linecap="round"/>
-              </g>
-              <!-- hand: back of the hand, four curled fingers, thumb over the top -->
-              <path d="M42-13c6-4 16-4 22-1 3 2 4 6 4 10l0 9c0 6-4 9-10 9l-12 0c-4 0-6-3-6-7z" fill="url(#skin)" stroke="#b0704f" stroke-width=".9"/>
-              <g fill="url(#skin)" stroke="#b0704f" stroke-width=".9">
-                <rect x="47" y="-4" width="5.6" height="15.5" rx="2.8"/>
-                <rect x="52.4" y="-4.5" width="5.6" height="16.5" rx="2.8"/>
-                <rect x="57.8" y="-4.5" width="5.6" height="16" rx="2.8"/>
-                <rect x="63" y="-3.5" width="5.2" height="13.5" rx="2.6"/>
-              </g>
-              <path d="M48.5 4h3M54 4.5h3M59.4 4.5h3M64.4 4h2.5" stroke="#b0704f" stroke-width=".8" stroke-linecap="round"/>
-              <path d="M44-9c4-5 12-6 18-3 2 1 3 4 1 5-5-1-10-1-14 1" fill="url(#skin)" stroke="#b0704f" stroke-width=".9" stroke-linejoin="round"/>
-              <path d="M47-11.5q6-2 11 0" stroke="#fff" stroke-opacity=".35" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-            </g>
-          </g>
-        </g>
-
         <!-- bench -->
         <g>
           <!-- lamp light pool -->
-          <g class="lampglow"><ellipse cx="92" cy="276" rx="78" ry="34" fill="url(#lampGlow)"/></g>
+          <g class="lampglow"><ellipse cx="345" cy="276" rx="70" ry="32" fill="url(#lampGlow)"/></g>
           <rect x="16" y="282" width="368" height="16" rx="4" fill="url(#benchTop)"/>
           <rect x="16" y="282" width="368" height="2" fill="#e09a5a" opacity=".5"/>
           <rect x="26" y="298" width="348" height="110" fill="url(#benchFront)"/>
@@ -564,29 +415,34 @@
           <rect x="152" y="326" width="96" height="20" rx="2" fill="none" stroke="#5a3a10" stroke-opacity=".6"/>
           <text x="200" y="340.5" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="9.5" letter-spacing="1" fill="#3a2206">HON. J. BURDEN</text>
           <!-- sound block -->
-          <ellipse cx="368" cy="287" rx="20" ry="4" fill="#000" opacity=".45"/>
-          <path d="M350 277h36v7q-18 4-36 0z" fill="#4a250e"/>
-          <ellipse cx="368" cy="277" rx="18" ry="4" fill="#9a5a28"/>
+          <ellipse cx="74" cy="296" rx="24" ry="4" fill="#000" opacity=".45"/>
+          <path d="M52 288h44v6q-22 5-44 0z" fill="#4a250e"/>
+          <ellipse cx="74" cy="288" rx="22" ry="4.5" fill="#9a5a28"/>
+          <ellipse cx="74" cy="287.5" rx="15" ry="2.6" fill="#b06c34" opacity=".6"/>
           <!-- banker's lamp -->
+          <g transform="translate(253 0)">
           <ellipse cx="92" cy="283" rx="20" ry="4" fill="url(#gold)"/>
           <rect x="90" y="250" width="4" height="32" fill="url(#gold)"/>
           <path d="M58 254c4-18 64-18 68 0z" fill="url(#shade)"/>
           <path d="M64 249c10-10 46-10 56 0" stroke="#bff0d4" stroke-opacity=".45" stroke-width="2" fill="none"/>
           <rect x="58" y="253" width="68" height="3" rx="1.5" fill="url(#gold)"/>
           <ellipse cx="92" cy="257" rx="30" ry="3" fill="#fff4cc" opacity=".9"/>
+          </g>
           <!-- case files -->
           <g>
-            <rect x="100" y="274" width="34" height="8" rx="1" fill="#d9c49a" transform="rotate(-3 117 278)"/>
-            <rect x="102" y="270" width="32" height="7" rx="1" fill="#efe1c0" transform="rotate(2 119 274)"/>
-            <rect x="124" y="268" width="6" height="4" fill="#a3182a" transform="rotate(2 119 274)"/>
+            <rect x="244" y="274" width="34" height="8" rx="1" fill="#d9c49a" transform="rotate(-3 261 278)"/>
+            <rect x="246" y="270" width="32" height="7" rx="1" fill="#efe1c0" transform="rotate(2 263 274)"/>
+            <rect x="268" y="268" width="6" height="4" fill="#a3182a" transform="rotate(2 263 274)"/>
           </g>
-          <!-- left hand on bench -->
-          <g transform="translate(162 283) scale(-1 1)">
-            <path d="M-8-9c6-3 16-3 22 0 4 2 7 5 7 8 0 3-3 4-6 4l-19 0c-5 0-8-3-8-6 0-3 1-5 4-6z" fill="url(#skin)" stroke="#b0704f" stroke-width=".9"/>
-            <path d="M6-4.5l12 1M5-1l13 1.3M4 2.3l12 .5" stroke="#b0704f" stroke-width=".8" stroke-linecap="round" fill="none"/>
-            <path d="M-6-8c5-2 11-2 15 0" stroke="#fff" stroke-opacity=".35" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-            <path d="M-12-10q-3 6 0 12" stroke="#f4efe4" stroke-width="3" fill="none" stroke-linecap="round"/>
-          </g>
+        </g>
+        <!-- the judge: illustrated poses, swapped by data-pose -->
+        <g class="breathe" id="judgeArt">
+          <image class="pose p-idle" href="judge/idle.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-blink" href="judge/blink.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-reading" href="judge/reading.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-strike" href="judge/strike.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-guilty" href="judge/guilty.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-acquitted" href="judge/acquitted.webp" x="50" y="33" width="263.7" height="268.8"/>
         </g>
         <g class="dust" id="dust"></g>
         <!-- vignette -->
@@ -898,31 +754,27 @@
   }
   function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode */ } }
 
-  /* ---------- the judge's face ---------- */
-  function mood(m) { judgeSvg.setAttribute("data-mood", m); }
-  function look(dir) { judgeSvg.setAttribute("data-look", dir || ""); }
+  /* ---------- the judge ---------- */
+  var pose = "idle";
+  function setPose(p) { pose = p; judgeSvg.setAttribute("data-pose", p); }
+  function mood(m) { setPose(m); }
   (function blinkLoop() {
     setTimeout(function () {
-      judgeSvg.classList.add("blink");
-      setTimeout(function () { judgeSvg.classList.remove("blink"); blinkLoop(); }, 130);
-    }, 2400 + Math.random() * 3200);
-  })();
-  (function glanceLoop() {
-    setTimeout(function () {
-      if (judgeSvg.getAttribute("data-mood") === "idle" && !busy) {
-        var dirs = ["left", "right", "", "down"];
-        look(dirs[Math.floor(Math.random() * dirs.length)]);
+      if (pose === "idle") {
+        judgeSvg.setAttribute("data-pose", "blink");
+        setTimeout(function () { if (pose === "idle") judgeSvg.setAttribute("data-pose", "idle"); blinkLoop(); }, 140);
+      } else {
+        blinkLoop();
       }
-      glanceLoop();
-    }, 2600 + Math.random() * 2600);
+    }, 2600 + Math.random() * 3400);
   })();
   var readTimer = 0;
   excuseEl.addEventListener("input", function () {
     $("count").textContent = excuseEl.value.length + "/400";
     if (busy) return;
-    mood("reading"); look("down");
+    mood("reading");
     clearTimeout(readTimer);
-    readTimer = setTimeout(function () { if (!busy) { mood("idle"); look(""); } }, 1600);
+    readTimer = setTimeout(function () { if (!busy) mood("idle"); }, 1600);
   });
 
   /* ---------- sound ---------- */
@@ -1036,8 +888,8 @@
     var ns = "http://www.w3.org/2000/svg";
     for (var i = 0; i < n; i++) {
       var c = document.createElementNS(ns, "circle");
-      c.setAttribute("cx", 368 + (Math.random() * 18 - 9));
-      c.setAttribute("cy", 277);
+      c.setAttribute("cx", 74 + (Math.random() * 30 - 15));
+      c.setAttribute("cy", 288);
       c.setAttribute("r", (0.8 + Math.random() * 1.8).toFixed(1));
       c.setAttribute("fill", Math.random() > 0.5 ? "#f3d9a8" : "#c99a62");
       var ang = Math.PI + Math.random() * Math.PI;
@@ -1051,6 +903,8 @@
     setTimeout(function () { g.innerHTML = ""; }, 1200);
   }
   function impact(power) {
+    setPose("strike");
+    if (power < 0.8) later(function () { setPose("idle"); }, 170);
     knock(power);
     dust(power > 0.8 ? 16 : 6);
     if (power > 0.8) {
@@ -1154,7 +1008,7 @@
       later(function () {
         stampSound(); vibrate(40);
         restart(verdictEl, "thump");
-        mood(guilty ? "guilty" : "acquitted"); look("");
+        mood(guilty ? "guilty" : "acquitted");
         sting(guilty);
       }, r ? 0 : 360);
     }, r ? 0 : 520);
@@ -1185,21 +1039,18 @@
     bangBtn.disabled = true;
     $("bangLabel").textContent = "Order in the court";
     if (!verdictEl.hidden) verdictEl.classList.remove("in");
-    mood("idle"); look("down");
-    judgeSvg.classList.remove("banging");
+    mood("reading");
     if (r) {
       fillDoc(result); knock(1); reveal(result); return;
     }
     // 1. she reads it
-    judgeSvg.classList.add("deliberating");
     say("The court deliberates…");
     murmur(true);
     later(function () {
       // 2. order, order, ORDER
-      judgeSvg.classList.remove("deliberating");
       murmur(false);
       say("");
-      restart(judgeSvg, "banging");
+      setPose("idle");
       later(function () { impact(0.3); }, 180);
       later(function () { impact(0.5); }, 480);
       later(function () { impact(1); fillDoc(result); }, 870);
