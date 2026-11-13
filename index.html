@@ -3,379 +3,529 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#140908">
+<meta name="theme-color" content="#170a06">
 <title>Excuse Court</title>
+<meta name="description" content="Your excuse is on trial. The Honorable June Burden has heard worse. Not often.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='22' width='34' height='16' rx='4' transform='rotate(-35 23 30)' fill='%23c08a3e'/%3E%3Crect x='26' y='30' width='6' height='30' rx='3' transform='rotate(-35 29 45)' fill='%235a3418'/%3E%3Crect x='30' y='52' width='30' height='8' rx='3' fill='%233a1e0e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Mrs+Saint+Delafield&family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a100c;
-    --cream: #f6efe2;
-    --gold: #e4c26a;
-    --gold-deep: #8a6420;
-    --wood: #6b3f1d;
-    --robe: #141414;
-    --guilty: #9d1c2b;
-    --acquit: #176b42;
-    --paper: #f4ead7;
+    --ink: #22150e;
+    --cream: #f7eedd;
+    --gold: #d9b45a;
+    --gold-hi: #f6e2a4;
+    --gold-lo: #8c6423;
+    --guilty: #a3182a;
+    --acquit: #17734a;
+    --paper: #f5ecd8;
+    --serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
+    --display: "Playfair Display", Georgia, serif;
+    --engraved: "Cinzel", "Trajan Pro", Georgia, serif;
+    --type: "Special Elite", "Courier New", monospace;
+    --stamp: "Anton", Impact, "Arial Narrow Bold", sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     min-height: 100vh;
     color: var(--cream);
-    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
-    background:
-      radial-gradient(900px 420px at 50% -8%, #5a3028 0%, transparent 55%),
-      repeating-linear-gradient(90deg, #1c0e0c 0 18px, #140908 18px 36px);
+    font-family: var(--serif);
+    background-color: #170a06;
+    background-image:
+      radial-gradient(120% 60% at 50% 0%, rgba(255, 190, 120, 0.16), transparent 60%),
+      radial-gradient(140% 90% at 50% 120%, rgba(0, 0, 0, 0.7), transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='1600'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9 0.012' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.17  0 0 0 0 0.08  0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"),
+      linear-gradient(90deg, #1d0d07, #2a140b 50%, #1d0d07);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  main {
-    width: min(520px, 100%);
+  .page {
+    width: min(1120px, 100%);
     margin: 0 auto;
     padding:
-      max(18px, env(safe-area-inset-top))
+      max(20px, env(safe-area-inset-top))
       max(16px, env(safe-area-inset-right))
-      max(28px, env(safe-area-inset-bottom))
+      max(32px, env(safe-area-inset-bottom))
       max(16px, env(safe-area-inset-left));
   }
-  header { text-align: center; }
+  /* ---------- header ---------- */
+  header { text-align: center; position: relative; z-index: 2; }
   .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
     margin: 0 0 6px;
-    font-family: "Segoe UI", system-ui, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-family: var(--engraved);
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
     color: var(--gold);
   }
+  @media (max-width: 400px) { .kicker::before, .kicker::after { width: 14px; } .kicker { gap: 7px; letter-spacing: .1em; } }
+  .kicker::before, .kicker::after {
+    content: ""; width: 28px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .kicker::after { transform: scaleX(-1); }
   h1 {
     margin: 0;
-    font-size: clamp(40px, 11vw, 58px);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    font-weight: 700;
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(46px, 13vw, 76px);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    background: linear-gradient(180deg, #fff6d8 0%, #f1cf7a 45%, #b8862e 70%, #f4da92 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 0 #4a2a10) drop-shadow(0 8px 18px rgba(0, 0, 0, 0.6));
   }
   .sub {
     margin: 10px auto 0;
-    max-width: 36ch;
-    color: #f0dcb4;
-    font-size: 16px;
+    max-width: 34ch;
+    color: #e8d3ac;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 17px;
     line-height: 1.35;
   }
-  .bench {
+  /* ---------- scene ---------- */
+  .stage { position: relative; margin: 14px -16px 0; }
+  .scene {
     position: relative;
-    margin: 18px auto 8px;
-    height: 300px;
-  }
-  svg.judge {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    filter: drop-shadow(0 12px 0 rgba(0, 0, 0, 0.25));
-  }
-  .arm {
-    transform-box: view-box;
-    transform-origin: 248px 168px;
-    transform: rotate(-38deg);
-  }
-  .is-banging .arm {
-    animation: bang 0.62s cubic-bezier(.18, .7, .2, 1) forwards;
-  }
-  @keyframes bang {
-    0% { transform: rotate(-42deg); }
-    48% { transform: rotate(16deg); }
-    64% { transform: rotate(4deg); }
-    82% { transform: rotate(12deg); }
-    100% { transform: rotate(8deg); }
-  }
-  .is-banging {
-    animation: shake 0.48s linear 0.28s both;
-  }
-  @keyframes shake {
-    0%, 100% { transform: translate(0, 0) rotate(0); }
-    15% { transform: translate(-7px, 2px) rotate(-0.6deg); }
-    30% { transform: translate(8px, -3px) rotate(0.7deg); }
-    45% { transform: translate(-6px, 1px) rotate(-0.4deg); }
-    60% { transform: translate(5px, -1px) rotate(0.3deg); }
-    75% { transform: translate(-3px, 1px); }
-  }
-  .wham {
-    position: absolute;
-    right: 6%;
-    top: 42%;
-    margin: 0;
-    font-family: Impact, "Arial Black", "Haettenschweiler", sans-serif;
-    font-size: 54px;
-    letter-spacing: 0.04em;
-    color: #ffdf6e;
-    -webkit-text-stroke: 2px #6e1420;
-    opacity: 0;
-    pointer-events: none;
-    transform: rotate(-14deg) scale(0.3);
-  }
-  .is-banging .wham {
-    animation: pop 0.55s ease-out 0.26s both;
-  }
-  @keyframes pop {
-    0% { opacity: 0; transform: rotate(-14deg) scale(0.3); }
-    25% { opacity: 1; transform: rotate(-8deg) scale(1.12); }
-    100% { opacity: 0; transform: rotate(-6deg) scale(1.35); }
-  }
-  form { margin-top: 4px; }
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-family: "Segoe UI", system-ui, sans-serif;
-    font-size: 13px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-  textarea {
-    display: block;
-    width: 100%;
-    min-height: 120px;
-    resize: vertical;
-    padding: 14px 14px 16px;
-    border: 3px solid var(--gold);
-    border-radius: 14px;
-    background: #241410;
-    color: var(--cream);
-    font: 16px/1.4 Georgia, "Palatino Linotype", Palatino, serif;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  }
-  textarea:focus {
-    outline: 3px solid #fff3c4;
-    outline-offset: 2px;
-  }
-  textarea::placeholder { color: #b7a28a; }
-  button {
-    font-family: "Segoe UI", system-ui, sans-serif;
-    cursor: pointer;
-  }
-  button:focus-visible {
-    outline: 3px solid #fff;
-    outline-offset: 3px;
-  }
-  #bang, #share {
-    display: block;
-    width: 100%;
-    min-height: 60px;
-    margin-top: 12px;
-    border-radius: 14px;
-    border: 3px solid #fff1c2;
-    background: var(--gold);
-    color: #1a100c;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    box-shadow: 0 6px 0 var(--gold-deep);
-  }
-  #bang:active, #share:active {
-    transform: translateY(3px);
-    box-shadow: 0 3px 0 var(--gold-deep);
-  }
-  #bang:disabled {
-    cursor: wait;
-    filter: saturate(0.7);
-  }
-  #verdict {
-    margin-top: 18px;
-    padding: 18px 16px 16px;
-    background: var(--paper);
-    color: var(--ink);
-    border-radius: 16px;
-    border: 4px solid #1a100c;
-    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.35);
-  }
-  #verdict.slam {
-    animation: slam 0.42s cubic-bezier(.15, 1.25, .35, 1) both;
-  }
-  @keyframes slam {
-    0% { opacity: 0; transform: scale(1.18) rotate(-1.5deg); }
-    100% { opacity: 1; transform: none; }
-  }
-  .case {
-    margin: 0;
-    text-align: center;
-    font-family: "Segoe UI", system-ui, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #6d5844;
-  }
-  .finds {
-    margin: 8px 0 4px;
-    text-align: center;
-    font-size: 15px;
-  }
-  .stamp {
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    margin: 6px auto 12px;
-    padding: 2px 12px 4px;
-    border: 5px solid currentColor;
-    font-family: Impact, "Arial Black", "Haettenschweiler", sans-serif;
-    line-height: 1;
-    text-align: center;
-  }
-  .stamp.guilty {
-    color: var(--guilty);
-    font-size: clamp(46px, 14vw, 74px);
-    letter-spacing: 0.08em;
-    transform: rotate(-7deg);
-  }
-  .stamp.acquitted {
-    color: var(--acquit);
-    font-size: clamp(30px, 9vw, 52px);
-    letter-spacing: 0.04em;
-    transform: rotate(4deg);
-  }
-  .charge {
-    margin: 0 0 10px;
-    text-align: center;
-    font-size: 17px;
-    font-style: italic;
-    color: #4e3828;
-  }
-  .line {
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.4;
-  }
-  .score-label {
-    margin: 16px 0 0;
-    font-family: "Segoe UI", system-ui, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #6d5844;
-  }
-  .score {
-    margin: 2px 0 8px;
-    font-family: Impact, "Arial Black", sans-serif;
-    font-size: 52px;
-    line-height: 1;
-    letter-spacing: 0.02em;
-  }
-  .score span {
-    font-family: Georgia, serif;
-    font-size: 22px;
-    letter-spacing: 0;
-  }
-  .meter {
-    height: 14px;
-    border-radius: 999px;
-    background: #e4d3b8;
-    border: 2px solid #1a100c;
     overflow: hidden;
+    aspect-ratio: 400 / 372;
+    border-top: 1px solid rgba(246, 226, 164, 0.18);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
   }
-  .meter i {
-    display: block;
-    height: 100%;
-    width: 0;
-    background: var(--guilty);
+  .scene svg { display: block; width: 100%; height: 100%; }
+  .flash {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle at 19% 78%, rgba(255, 240, 200, 0.85), rgba(255, 200, 120, 0.2) 35%, transparent 65%);
+    mix-blend-mode: screen;
   }
-  .meter.mid i { background: #b57a12; }
-  .meter.high i { background: var(--acquit); }
-  #verdict.slam .meter i {
-    animation: fill 0.55s ease-out 0.12s both;
+  .caption {
+    position: absolute; left: 50%; bottom: 12px; transform: translate(-50%, 6px);
+    margin: 0; padding: 7px 16px 8px;
+    font-family: var(--display); font-style: italic; font-size: 15px;
+    color: #f7e7c4; white-space: nowrap;
+    background: rgba(20, 8, 4, 0.72);
+    border: 1px solid rgba(217, 180, 90, 0.35);
+    border-radius: 999px;
+    opacity: 0; transition: opacity .25s, transform .25s;
+    pointer-events: none;
   }
-  @keyframes fill {
-    from { width: 0; }
+  .caption.on { opacity: 1; transform: translate(-50%, 0); }
+
+  /* judge poses */
+  .breathe { animation: breathe 4.2s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 290px; }
+  @keyframes breathe { 50% { transform: translateY(1.2px) scaleY(0.997); } }
+  .pose { opacity: 0; }
+  [data-pose=idle] .p-idle, [data-pose=blink] .p-blink, [data-pose=reading] .p-reading,
+  [data-pose=strike] .p-strike, [data-pose=guilty] .p-guilty, [data-pose=acquitted] .p-acquitted { opacity: 1; }
+  .lampglow { transition: opacity .2s; }
+  .flicker .lampglow { animation: flicker .5s steps(1) both; }
+  @keyframes flicker { 0% { opacity: 1.3; } 20% { opacity: .55; } 40% { opacity: 1.1; } 60% { opacity: .8; } 100% { opacity: 1; } }
+  .shake { animation: shake .42s linear both; }
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    15% { transform: translate(-6px, 3px) rotate(-.4deg); }
+    30% { transform: translate(7px, -2px) rotate(.5deg); }
+    45% { transform: translate(-5px, 2px); }
+    60% { transform: translate(4px, -1px); }
+    80% { transform: translate(-2px, 1px); }
   }
-  #copyNote, #manual {
-    margin: 10px 0 0;
-    font-family: "Segoe UI", system-ui, sans-serif;
-    font-size: 15px;
-    color: var(--gold);
-    text-align: center;
+  .dust circle { animation: dust .7s cubic-bezier(.2,.7,.3,1) forwards; transform-box: view-box; }
+  @keyframes dust { from { transform: translate(0, 0); opacity: .95; } to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
+  .flash.go { animation: flash .5s ease-out both; }
+  @keyframes flash { 0% { opacity: .9; } 100% { opacity: 0; } }
+
+  /* ---------- testimony ---------- */
+  .bar { position: relative; z-index: 2; }
+  form { margin-top: 18px; }
+  .sheet {
+    position: relative;
+    padding: 16px 18px 14px;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 29px, rgba(110, 140, 190, 0.28) 29px 30px) 0 46px / 100% calc(100% - 46px) no-repeat,
+      linear-gradient(90deg, transparent 38px, rgba(190, 60, 60, 0.35) 38px 39px, transparent 39px),
+      linear-gradient(180deg, #fbf5e7, #f1e6cc);
+    color: var(--ink);
+    border-radius: 6px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 18px 30px -12px rgba(0, 0, 0, 0.75), 0 2px 0 #c9b48a;
   }
-  #manual {
-    white-space: pre-wrap;
-    text-align: left;
-    padding: 12px;
+  label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin: 0 0 6px 26px;
+    font-family: var(--engraved); font-weight: 700;
+    font-size: 12px; letter-spacing: 0.12em;
+    color: #6b4c2c;
+  }
+  label small { font-family: var(--type); letter-spacing: 0; font-size: 12px; color: #9a8063; font-weight: 400; }
+  textarea {
+    display: block; width: 100%;
+    min-height: 120px; resize: none;
+    margin: 0; padding: 4px 4px 0 26px;
+    border: 0; outline: 0;
+    background: transparent;
+    color: #1d2a4a;
+    font: 18px/30px var(--type);
+  }
+  textarea::placeholder { color: #9d8b74; }
+  .sheet:focus-within { box-shadow: 0 0 0 3px rgba(246, 226, 164, 0.75), 0 18px 30px -12px rgba(0, 0, 0, 0.75), 0 2px 0 #c9b48a; }
+  button { font-family: var(--engraved); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  button:focus-visible { outline: 3px solid #fff3c4; outline-offset: 3px; }
+  .gold-btn {
+    position: relative; display: flex; align-items: center; justify-content: center; gap: 12px;
+    width: 100%; min-height: 62px; margin-top: 16px;
+    border: 0; border-radius: 12px;
+    color: #2a1706;
+    font-size: 19px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    background: linear-gradient(180deg, #fbe7a8 0%, #e2b85a 42%, #c3913a 58%, #e9c46e 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      inset 0 -2px 0 rgba(90, 55, 10, 0.35),
+      0 0 0 1px #6e4914,
+      0 6px 0 #5a3a0f,
+      0 14px 24px -6px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 1px 0 rgba(255, 240, 200, 0.7);
+    transition: transform .08s, box-shadow .08s, filter .2s;
+  }
+  .gold-btn svg { width: 26px; height: 26px; flex: none; }
+  .gold-btn:hover { filter: brightness(1.06); }
+  .gold-btn:active { transform: translateY(4px); box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -2px 0 rgba(90,55,10,.35), 0 0 0 1px #6e4914, 0 2px 0 #5a3a0f, 0 6px 12px -6px rgba(0,0,0,.7); }
+  .gold-btn:disabled { cursor: wait; filter: saturate(.6) brightness(.9); }
+  .ghost-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; min-height: 54px; margin-top: 14px;
     border-radius: 12px;
-    background: #241410;
-    color: var(--cream);
-    border: 2px solid var(--gold);
+    border: 1px solid rgba(217, 180, 90, 0.55);
+    background: rgba(30, 14, 7, 0.6);
+    color: var(--gold-hi);
+    font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background .2s;
   }
+  .ghost-btn:hover { background: rgba(60, 30, 14, 0.7); }
+  .ghost-btn svg { width: 20px; height: 20px; }
+  .tries { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tries span { width: 100%; text-align: center; font-family: var(--display); font-style: italic; color: #c9ad80; font-size: 14px; }
+  .chip {
+    padding: 7px 11px; border-radius: 999px;
+    font-family: var(--serif); font-size: 12.5px; letter-spacing: 0;
+    color: #f3e2bf; background: rgba(255, 230, 180, 0.06);
+    border: 1px solid rgba(217, 180, 90, 0.35);
+    transition: background .2s, border-color .2s;
+  }
+  .chip:hover { background: rgba(255, 230, 180, 0.14); border-color: rgba(217, 180, 90, 0.7); }
+
+  /* ---------- ruling ---------- */
+  #verdict { margin-top: 26px; perspective: 900px; }
+  .doc {
+    position: relative;
+    padding: 22px 20px 20px;
+    color: var(--ink);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45  0 0 0 0 0.33  0 0 0 0 0.18  0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+      radial-gradient(120% 90% at 50% 40%, #fbf4e3 0%, #f1e4c6 70%, #e2cfa6 100%);
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 30px 50px -18px rgba(0, 0, 0, 0.85), 0 3px 0 #bba578;
+    transform-origin: 50% 0;
+  }
+  .doc::before {
+    content: ""; position: absolute; inset: 8px; pointer-events: none;
+    border: 1px solid rgba(120, 85, 40, 0.45);
+    box-shadow: inset 0 0 0 3px rgba(245, 236, 216, 1), inset 0 0 0 4px rgba(120, 85, 40, 0.3);
+  }
+  #verdict.in .doc { animation: drop .55s cubic-bezier(.2,1.1,.35,1) both; }
+  @keyframes drop { 0% { opacity: 0; transform: translateY(-26px) rotateX(18deg); } 100% { opacity: 1; transform: none; } }
+  #verdict.thump .doc { animation: thump .32s ease-out; }
+  @keyframes thump { 0% { transform: scale(1); } 30% { transform: scale(.985) translateY(3px); } 100% { transform: none; } }
+  .doc-head { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 10px; text-align: center; }
+  .doc-head svg { width: 44px; height: 44px; }
+  .doc-court { margin: 0; font-family: var(--engraved); font-weight: 700; font-size: 11.5px; letter-spacing: 0.12em; color: #5a3d20; line-height: 1.5; }
+  .doc-meta { display: flex; justify-content: space-between; margin: 12px 4px 0; padding: 8px 0; border-top: 2px solid #5a3d20; border-bottom: 1px solid #5a3d20; font-family: var(--type); font-size: 13px; color: #4a3424; }
+  .matter { margin: 14px 4px 0; font-family: var(--engraved); font-weight: 700; font-size: 11px; letter-spacing: .14em; color: #7a5b3a; }
+  .charge { margin: 4px 4px 0; font-family: var(--type); font-size: 17px; line-height: 1.45; color: #1d2a4a; overflow-wrap: anywhere; }
+  .finds { margin: 18px 0 0; text-align: center; font-family: var(--display); font-style: italic; font-size: 17px; color: #4a3424; }
+  .stamp-wrap { display: flex; justify-content: center; min-height: 120px; align-items: center; margin: 14px 0 14px; }
+  .stamp {
+    margin: 0; padding: 4px 18px 2px;
+    font-family: var(--stamp); line-height: 1.05; text-transform: uppercase;
+    border: 5px solid currentColor; border-radius: 8px;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0), 0 0 0 2px currentColor inset;
+    opacity: 0;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 3.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 3.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+  .stamp.guilty { color: var(--guilty); font-size: clamp(56px, 17vw, 76px); letter-spacing: 0.06em; --r: -8deg; }
+  .stamp.acquitted { color: var(--acquit); font-size: clamp(40px, 12vw, 62px); letter-spacing: 0.05em; --r: 5deg; }
+  .stamp.on { opacity: .93; transform: rotate(var(--r)); }
+  .stamp.slam { animation: stamp .38s cubic-bezier(.5,0,.75,0) both, settle .3s ease-out .38s both; }
+  @keyframes stamp { 0% { opacity: 0; transform: rotate(calc(var(--r) - 10deg)) scale(2.8); filter: blur(4px); } 100% { opacity: .93; transform: rotate(var(--r)) scale(.92); filter: blur(0); } }
+  @keyframes settle { 0% { transform: rotate(var(--r)) scale(.92); } 100% { transform: rotate(var(--r)) scale(1); opacity: .93; } }
+  .line { margin: 6px 4px 0; font-size: 17px; line-height: 1.6; color: #2a1a10; }
+  .scorebox { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 12px; margin: 20px 4px 0; padding-top: 14px; border-top: 1px solid rgba(90, 61, 32, 0.4); }
+  .score-label { margin: 0; font-family: var(--engraved); font-weight: 700; font-size: 11px; letter-spacing: .14em; color: #7a5b3a; }
+  .score { margin: 2px 0 0; font-family: var(--display); font-weight: 900; font-size: 54px; line-height: 1; color: #2a1a10; font-variant-numeric: tabular-nums; }
+  .score span { font-size: 20px; font-weight: 700; color: #8a6a48; }
+  .scales { width: 132px; height: 84px; overflow: visible; }
+  .scales .beam, .scales .pan { transition: transform .9s cubic-bezier(.3,1.4,.4,1); transform-box: view-box; }
+  .scales .beam { transform-origin: 66px 22px; }
+  .meter { position: relative; height: 10px; margin: 12px 4px 0; border-radius: 999px; background: rgba(90, 61, 32, 0.16); box-shadow: inset 0 1px 2px rgba(0,0,0,.25); overflow: hidden; }
+  .meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 999px; background: linear-gradient(90deg, #7b1220, var(--guilty)); transition: width .9s cubic-bezier(.3,.8,.3,1); }
+  .meter.mid i { background: linear-gradient(90deg, #8a5a10, #c18a1e); }
+  .meter.high i { background: linear-gradient(90deg, #0f5232, var(--acquit)); }
+  .sign { display: flex; justify-content: flex-end; margin: 18px 4px 0; }
+  .sign div { text-align: center; }
+  .sig { display: block; font-family: "Mrs Saint Delafield", "Brush Script MT", cursive; font-size: 46px; line-height: 1; color: #1d2a6a; padding: 4px 22px 0 10px; clip-path: inset(0 100% 0 0); }
+  .sig.on { clip-path: inset(0 0 0 0); transition: clip-path .9s ease-in-out; }
+  .sign small { display: block; border-top: 1px solid #5a3d20; padding-top: 4px; font-family: var(--engraved); font-size: 10.5px; letter-spacing: .12em; color: #6b4c2c; font-weight: 700; }
+
+  .record {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 14px;
+    margin: 22px 0 0; padding: 12px 14px;
+    border-top: 1px solid rgba(217, 180, 90, 0.22);
+    font-size: 14px; color: #d9c29a; text-align: center;
+  }
+  .record b { color: var(--gold-hi); font-family: var(--display); font-size: 17px; }
+  .record .rank { font-family: var(--display); font-style: italic; color: #f0d898; }
+  .sound {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 999px;
+    background: transparent; border: 1px solid rgba(217, 180, 90, 0.3);
+    color: #d9c29a; font-family: var(--serif); font-size: 13px; letter-spacing: 0;
+  }
+  .sound svg { width: 16px; height: 16px; }
+  #copyNote { margin: 12px 0 0; font-family: var(--display); font-style: italic; font-size: 16px; color: var(--gold-hi); text-align: center; }
+  #manual { margin: 10px 0 0; white-space: pre-wrap; padding: 14px; border-radius: 10px; background: rgba(20, 8, 4, 0.7); color: var(--cream); border: 1px solid var(--gold); font: 14px/1.5 var(--type); }
+  footer { margin-top: 26px; text-align: center; font-size: 12.5px; color: #a48a66; }
+  footer a { color: #e2c78c; }
   [hidden] { display: none !important; }
+
+  @media (min-width: 560px) {
+    .stage { margin: 18px 0 0; }
+    .scene { border-radius: 14px; border: 1px solid rgba(246, 226, 164, 0.2); }
+  }
+  @media (min-width: 940px) {
+    .page { padding-top: 34px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 44px; align-items: start; margin-top: 8px; }
+    .left { position: sticky; top: 24px; }
+    .stage { margin-top: 0; }
+    form { margin-top: 0; }
+    .sub { font-size: 18px; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .arm, .is-banging, .is-banging .wham, #verdict.slam, #verdict.slam .meter i {
-      animation: none !important;
-    }
-    .is-banging .arm { transform: rotate(8deg); }
+    *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
+    .breathe { animation: none !important; }
   }
 </style>
 </head>
 <body>
-<main>
+<div class="page">
   <header>
-    <p class="kicker">Municipal docket of weak reasons</p>
+    <p class="kicker">Municipal Docket of Weak Reasons</p>
     <h1>Excuse Court</h1>
     <p class="sub">The Honorable June Burden presiding. She has heard worse. Not often.</p>
   </header>
 
-  <div class="bench" id="bench">
-    <p class="wham" aria-hidden="true">WHAM</p>
-    <svg class="judge" viewBox="0 0 400 320" role="img" aria-label="Cartoon judge raising a gavel">
-      <rect x="20" y="236" width="360" height="72" rx="10" fill="#6b3f1d"/>
-      <rect x="20" y="236" width="360" height="16" fill="#8d5728"/>
-      <rect x="40" y="292" width="18" height="22" fill="#4a2a12"/>
-      <rect x="342" y="292" width="18" height="22" fill="#4a2a12"/>
-      <rect x="308" y="208" width="58" height="30" rx="3" fill="#e6c98a" stroke="#3d2912" stroke-width="3"/>
-      <text x="200" y="274" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#f6e7c1" letter-spacing="1.5">HON. JUNE BURDEN</text>
-      <path d="M112 184c10-36 166-36 176 4l16 70H100z" fill="#161616"/>
-      <path d="M176 172l24 46 24-46" fill="none" stroke="#f4ead7" stroke-width="7" stroke-linejoin="round"/>
-      <circle cx="200" cy="112" r="54" fill="#f3c7a4"/>
-      <ellipse cx="148" cy="118" rx="11" ry="15" fill="#e5b08a"/>
-      <ellipse cx="252" cy="118" rx="11" ry="15" fill="#e5b08a"/>
-      <path d="M150 98c8-46 92-46 100 0-10-26-90-28-100 0z" fill="#f7f5f0"/>
-      <path d="M158 108c-8 18-4 40 4 48" fill="none" stroke="#f7f5f0" stroke-width="10" stroke-linecap="round"/>
-      <path d="M242 108c8 18 4 40-4 48" fill="none" stroke="#f7f5f0" stroke-width="10" stroke-linecap="round"/>
-      <path d="M164 100l30 12" stroke="#2b1c16" stroke-width="6" stroke-linecap="round"/>
-      <path d="M236 100l-30 12" stroke="#2b1c16" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="178" cy="122" r="16" fill="#fff"/>
-      <circle cx="222" cy="122" r="16" fill="#fff"/>
-      <circle cx="180" cy="123" r="4.5" fill="#1c120c"/>
-      <circle cx="224" cy="123" r="4.5" fill="#1c120c"/>
-      <circle cx="178" cy="122" r="16" fill="none" stroke="#1c1c1c" stroke-width="3"/>
-      <circle cx="222" cy="122" r="16" fill="none" stroke="#1c1c1c" stroke-width="3"/>
-      <path d="M194 122h12" stroke="#1c1c1c" stroke-width="3"/>
-      <path d="M200 128c-1 8 0 14 1 16" stroke="#c48968" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M174 156c18-16 34-16 52 0" stroke="#7a3034" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <g class="arm">
-        <path d="M246 164c28-6 52 10 62 34" stroke="#111" stroke-width="24" fill="none" stroke-linecap="round"/>
-        <path d="M300 196c12 10 16 26 12 38" stroke="#f3c7a4" stroke-width="14" fill="none" stroke-linecap="round"/>
-        <g transform="translate(306 228) rotate(-28)">
-          <rect x="-8" y="0" width="16" height="62" rx="7" fill="#3d2912"/>
-          <rect x="-30" y="-10" width="60" height="24" rx="6" fill="#7a4a22" stroke="#3d2912" stroke-width="2"/>
+  <div class="layout">
+  <div class="left">
+  <div class="stage" id="stage">
+    <div class="scene" id="scene">
+      <svg class="judge-svg" id="judge" viewBox="0 28 400 372" role="img" aria-label="Judge June Burden at her bench, gavel raised" data-pose="idle">
+        <defs>
+          <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b1c10"/><stop offset="1" stop-color="#1c0c06"/></linearGradient>
+          <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2414"/><stop offset="1" stop-color="#2a130a"/></linearGradient>
+          <radialGradient id="sconceGlow"><stop offset="0" stop-color="#ffcf8a" stop-opacity=".55"/><stop offset=".35" stop-color="#ff9a4a" stop-opacity=".18"/><stop offset="1" stop-color="#ff8a3a" stop-opacity="0"/></radialGradient>
+          <radialGradient id="lampGlow" cx=".5" cy=".3"><stop offset="0" stop-color="#fff0c0" stop-opacity=".7"/><stop offset=".4" stop-color="#ffc56a" stop-opacity=".2"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+          <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8e29a"/><stop offset=".45" stop-color="#c9973e"/><stop offset=".7" stop-color="#8a5f1e"/><stop offset="1" stop-color="#e9c46e"/></linearGradient>
+          <radialGradient id="seal" cx=".4" cy=".35"><stop offset="0" stop-color="#e9c878"/><stop offset=".6" stop-color="#a87a30"/><stop offset="1" stop-color="#6b4815"/></radialGradient>
+          <radialGradient id="skin" cx=".45" cy=".4" r=".65"><stop offset="0" stop-color="#f6d2b4"/><stop offset=".7" stop-color="#e9b48f"/><stop offset="1" stop-color="#c98c68"/></radialGradient>
+          <linearGradient id="robe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34323a"/><stop offset=".5" stop-color="#15141a"/><stop offset="1" stop-color="#08080b"/></linearGradient>
+          <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9c6c0"/></linearGradient>
+          <linearGradient id="benchTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b06c34"/><stop offset=".3" stop-color="#7d431c"/><stop offset="1" stop-color="#4a250f"/></linearGradient>
+          <linearGradient id="benchFront" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5e2e14"/><stop offset="1" stop-color="#2a1208"/></linearGradient>
+          <linearGradient id="benchPanel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a3519"/><stop offset="1" stop-color="#3a1a0a"/></linearGradient>
+          <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fa577"/><stop offset=".5" stop-color="#1b6b47"/><stop offset="1" stop-color="#0b3a25"/></linearGradient>
+          <linearGradient id="gavelWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3e200c"/><stop offset=".45" stop-color="#9a5a28"/><stop offset="1" stop-color="#4a250e"/></linearGradient>
+          <linearGradient id="sleeveUp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3842"/><stop offset=".45" stop-color="#1a1920"/><stop offset="1" stop-color="#08080b"/></linearGradient>
+          <linearGradient id="sleeveFore" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c3a45"/><stop offset=".4" stop-color="#1c1b22"/><stop offset="1" stop-color="#09090c"/></linearGradient>
+          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+          <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="1.1 0.02" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.25  0 0 0 0 0.1  0 0 0 0.35 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+          <path id="ring" d="M200,104 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/>
+        </defs>
+
+        <!-- wall -->
+        <rect x="0" y="0" width="400" height="400" fill="url(#wall)"/>
+        <g fill="url(#panel)" stroke="#1a0904" stroke-width="2">
+          <rect x="14" y="46" width="100" height="240" rx="3"/>
+          <rect x="286" y="46" width="100" height="240" rx="3"/>
         </g>
-      </g>
-    </svg>
+        <g fill="none" stroke="#7a4426" stroke-opacity=".5" stroke-width="1">
+          <rect x="24" y="56" width="80" height="220" rx="2"/>
+          <rect x="296" y="56" width="80" height="220" rx="2"/>
+        </g>
+        <rect x="0" y="0" width="400" height="400" filter="url(#grain)" opacity=".6"/>
+        <rect x="0" y="28" width="400" height="14" fill="#2a1208"/>
+        <rect x="0" y="40" width="400" height="3" fill="#7a4426" opacity=".6"/>
+
+        <!-- sconces -->
+        <g class="lampglow">
+          <circle cx="64" cy="92" r="120" fill="url(#sconceGlow)"/>
+          <circle cx="336" cy="92" r="120" fill="url(#sconceGlow)"/>
+        </g>
+        <g>
+          <path d="M58 104h12l-2 10h-8z" fill="url(#gold)"/>
+          <path d="M52 82q12-14 24 0l-3 20h-18z" fill="#f7dfae" opacity=".95"/>
+          <path d="M330 104h12l-2 10h-8z" fill="url(#gold)"/>
+          <path d="M324 82q12-14 24 0l-3 20h-18z" fill="#f7dfae" opacity=".95"/>
+        </g>
+
+        <!-- seal -->
+        <g>
+          <circle cx="200" cy="104" r="78" fill="#120604" opacity=".55" filter="url(#soft)"/>
+          <circle cx="200" cy="104" r="76" fill="url(#seal)"/>
+          <circle cx="200" cy="104" r="70" fill="none" stroke="#5a3a10" stroke-width="1.5"/>
+          <circle cx="200" cy="104" r="51" fill="#7a5420" stroke="#f3d48c" stroke-opacity=".5" stroke-width="1.2"/>
+          <circle cx="200" cy="104" r="76" fill="none" stroke="#fbe7a8" stroke-opacity=".55" stroke-width="1.5"/>
+          <text font-family="Cinzel, Georgia, serif" font-weight="700" font-size="9.6" fill="#3d2508" letter-spacing="1.2">
+            <textPath href="#ring" textLength="372">EXCUSATIO NON PETITA · ACCUSATIO MANIFESTA ·</textPath>
+          </text>
+        </g>
+
+        <!-- bench -->
+        <g>
+          <!-- lamp light pool -->
+          <g class="lampglow"><ellipse cx="345" cy="276" rx="70" ry="32" fill="url(#lampGlow)"/></g>
+          <rect x="16" y="282" width="368" height="16" rx="4" fill="url(#benchTop)"/>
+          <rect x="16" y="282" width="368" height="2" fill="#e09a5a" opacity=".5"/>
+          <rect x="26" y="298" width="348" height="110" fill="url(#benchFront)"/>
+          <rect x="26" y="298" width="348" height="110" filter="url(#grain)" opacity=".7"/>
+          <rect x="26" y="298" width="348" height="6" fill="#000" opacity=".3"/>
+          <g fill="url(#benchPanel)" stroke="#1d0b03" stroke-width="2">
+            <rect x="44" y="316" width="96" height="76" rx="3"/>
+            <rect x="260" y="316" width="96" height="76" rx="3"/>
+          </g>
+          <g fill="none" stroke="#b06c34" stroke-opacity=".35"><rect x="52" y="324" width="80" height="60" rx="2"/><rect x="268" y="324" width="80" height="60" rx="2"/></g>
+          <!-- nameplate -->
+          <rect x="148" y="322" width="104" height="28" rx="3" fill="url(#gold)" stroke="#4a2e08" stroke-width="1.5"/>
+          <rect x="152" y="326" width="96" height="20" rx="2" fill="none" stroke="#5a3a10" stroke-opacity=".6"/>
+          <text x="200" y="340.5" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="9.5" letter-spacing="1" fill="#3a2206">HON. J. BURDEN</text>
+          <!-- sound block -->
+          <ellipse cx="74" cy="296" rx="24" ry="4" fill="#000" opacity=".45"/>
+          <path d="M52 288h44v6q-22 5-44 0z" fill="#4a250e"/>
+          <ellipse cx="74" cy="288" rx="22" ry="4.5" fill="#9a5a28"/>
+          <ellipse cx="74" cy="287.5" rx="15" ry="2.6" fill="#b06c34" opacity=".6"/>
+          <!-- banker's lamp -->
+          <g transform="translate(253 0)">
+          <ellipse cx="92" cy="283" rx="20" ry="4" fill="url(#gold)"/>
+          <rect x="90" y="250" width="4" height="32" fill="url(#gold)"/>
+          <path d="M58 254c4-18 64-18 68 0z" fill="url(#shade)"/>
+          <path d="M64 249c10-10 46-10 56 0" stroke="#bff0d4" stroke-opacity=".45" stroke-width="2" fill="none"/>
+          <rect x="58" y="253" width="68" height="3" rx="1.5" fill="url(#gold)"/>
+          <ellipse cx="92" cy="257" rx="30" ry="3" fill="#fff4cc" opacity=".9"/>
+          </g>
+          <!-- case files -->
+          <g>
+            <rect x="244" y="274" width="34" height="8" rx="1" fill="#d9c49a" transform="rotate(-3 261 278)"/>
+            <rect x="246" y="270" width="32" height="7" rx="1" fill="#efe1c0" transform="rotate(2 263 274)"/>
+            <rect x="268" y="268" width="6" height="4" fill="#a3182a" transform="rotate(2 263 274)"/>
+          </g>
+        </g>
+        <!-- the judge: illustrated poses, swapped by data-pose -->
+        <g class="breathe" id="judgeArt">
+          <image class="pose p-idle" href="judge/idle.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-blink" href="judge/blink.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-reading" href="judge/reading.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-strike" href="judge/strike.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-guilty" href="judge/guilty.webp" x="50" y="33" width="263.7" height="268.8"/>
+          <image class="pose p-acquitted" href="judge/acquitted.webp" x="50" y="33" width="263.7" height="268.8"/>
+        </g>
+        <g class="dust" id="dust"></g>
+        <!-- vignette -->
+        <rect x="0" y="0" width="400" height="400" fill="url(#vig)"/>
+        <defs><radialGradient id="vig" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></radialGradient></defs>
+      </svg>
+      <div class="flash" id="flash"></div>
+      <p class="caption" id="caption" aria-hidden="true"></p>
+    </div>
+  </div>
   </div>
 
-  <form id="form">
-    <label for="excuse">State your excuse</label>
-    <textarea id="excuse" maxlength="400" placeholder="The dog ate my Wi-Fi, Your Honor, and the bus was emotionally unavailable."></textarea>
-    <button type="submit" id="bang">Bang the gavel</button>
-  </form>
+  <div class="right">
+  <div class="bar">
+    <form id="form">
+      <div class="sheet">
+        <label for="excuse">Sworn statement <small id="count">0/400</small></label>
+        <textarea id="excuse" maxlength="400" rows="4" placeholder="The dog ate my Wi-Fi, Your Honor, and the bus was emotionally unavailable."></textarea>
+      </div>
+      <button type="submit" id="bang" class="gold-btn">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><g transform="rotate(-35 16 16)"><rect x="5" y="6" width="18" height="9" rx="2.5" fill="#3a2006"/><rect x="12.5" y="14" width="3.5" height="14" rx="1.6" fill="#3a2006"/></g><rect x="17" y="26" width="13" height="3.5" rx="1.5" fill="#3a2006"/></svg>
+        <span id="bangLabel">Bang the gavel</span>
+      </button>
+    </form>
+    <div class="tries" id="tries">
+      <span>Or plead one of these</span>
+      <button type="button" class="chip">My flight got cancelled</button>
+      <button type="button" class="chip">The dog ate my homework</button>
+      <button type="button" class="chip">I was abducted by aliens</button>
+      <button type="button" class="chip">My alarm didn’t go off</button>
+    </div>
 
-  <section id="verdict" hidden aria-live="polite">
-    <p class="case" id="caseNo"></p>
-    <p class="finds">The court finds this excuse</p>
-    <p class="stamp" id="stamp"></p>
-    <p class="charge" id="charge"></p>
-    <p class="line" id="line"></p>
-    <p class="score-label">Believability</p>
-    <p class="score" id="score"></p>
-    <div class="meter" id="meter"><i id="meterBar"></i></div>
-  </section>
+    <section id="verdict" hidden aria-live="polite">
+      <article class="doc" id="doc">
+        <div class="doc-head">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="none" stroke="#5a3d20" stroke-width="1.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#5a3d20" stroke-width=".8"/><path d="M22 10v22M14 15h16M14 15l-4 9h8zM30 15l-4 9h8zM17 32h10" stroke="#5a3d20" stroke-width="1.4" fill="none" stroke-linejoin="round"/></svg>
+          <p class="doc-court">Municipal Docket<br>of Weak Reasons</p>
+          <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="none" stroke="#5a3d20" stroke-width="1.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#5a3d20" stroke-width=".8"/><path d="M22 10l3 8h8l-6.5 5 2.5 8-7-5-7 5 2.5-8-6.5-5h8z" fill="#5a3d20"/></svg>
+        </div>
+        <div class="doc-meta"><span id="caseNo"></span><span id="caseDate"></span></div>
+        <p class="matter">In the matter of the excuse</p>
+        <p class="charge" id="charge"></p>
+        <p class="finds">The court finds this excuse</p>
+        <div class="stamp-wrap"><p class="stamp" id="stamp"></p></div>
+        <p class="line" id="line"></p>
+        <div class="scorebox">
+          <div>
+            <p class="score-label">Believability</p>
+            <p class="score" id="score">0<span>/100</span></p>
+          </div>
+          <svg class="scales" viewBox="0 0 132 84" aria-hidden="true">
+            <path d="M66 10v62M50 78h32" stroke="#5a3d20" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="66" cy="10" r="4" fill="#5a3d20"/>
+            <g class="beam" id="beam"><path d="M14 22h104" stroke="#5a3d20" stroke-width="3" stroke-linecap="round"/><circle cx="66" cy="22" r="3.5" fill="#8a6423"/></g>
+            <g class="pan" id="panL"><path d="M14 22l-10 26h20z" fill="none" stroke="#5a3d20" stroke-width="1.2"/><path d="M2 48h24q-12 10-24 0z" fill="#8a6423"/></g>
+            <g class="pan" id="panR"><path d="M118 22l-10 26h20z" fill="none" stroke="#5a3d20" stroke-width="1.2"/><path d="M106 48h24q-12 10-24 0z" fill="#8a6423"/></g>
+          </svg>
+        </div>
+        <div class="meter" id="meter"><i id="meterBar"></i></div>
+        <div class="sign"><div><span class="sig" id="sig">June Burden</span><small>Presiding Judge</small></div></div>
+      </article>
+    </section>
 
-  <button type="button" id="share" hidden>Share this ruling</button>
-  <p id="copyNote" hidden></p>
-  <pre id="manual" hidden></pre>
-</main>
+    <button type="button" id="share" class="ghost-btn" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>
+      <span id="shareLabel">Share this ruling</span>
+    </button>
+    <p id="copyNote" hidden></p>
+    <pre id="manual" hidden></pre>
+
+    <div class="record" id="record">
+      <span id="recordText">No prior record. Yet.</span>
+      <button type="button" class="sound" id="sound" aria-pressed="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="currentColor"/><path id="waves" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+        <span id="soundLabel">Sound on</span>
+      </button>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <footer>One page. Nothing you type leaves your device.</footer>
+</div>
 <script>
 (function () {
   var VERDICTS = [
@@ -488,16 +638,6 @@
     }
   ];
 
-  var form = document.getElementById("form");
-  var excuseEl = document.getElementById("excuse");
-  var bangBtn = document.getElementById("bang");
-  var bench = document.getElementById("bench");
-  var verdictEl = document.getElementById("verdict");
-  var shareBtn = document.getElementById("share");
-  var copyNote = document.getElementById("copyNote");
-  var manual = document.getElementById("manual");
-  var timer = 0;
-  var lastShare = "";
 
   function hash(s) {
     var h = 2166136261;
@@ -588,10 +728,205 @@
     };
   }
 
-  function caseNumber(seed) {
-    return "EC-" + (1000 + (seed % 9000));
+  var $ = function (id) { return document.getElementById(id); };
+  var form = $("form");
+  var excuseEl = $("excuse");
+  var bangBtn = $("bang");
+  var judgeSvg = $("judge");
+  var scene = $("scene");
+  var verdictEl = $("verdict");
+  var shareBtn = $("share");
+  var copyNote = $("copyNote");
+  var manual = $("manual");
+  var caption = $("caption");
+  var timers = [];
+  var lastShare = "";
+  var busy = false;
+
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clearLater() { timers.forEach(clearTimeout); timers = []; }
+  function reduced() { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  function restart(el, cls) { el.classList.remove(cls); void el.getBoundingClientRect(); el.classList.add(cls); }
+
+  /* ---------- storage (optional) ---------- */
+  function load(key, fallback) {
+    try { var v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; }
+  }
+  function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode */ } }
+
+  /* ---------- the judge ---------- */
+  var pose = "idle";
+  function setPose(p) { pose = p; judgeSvg.setAttribute("data-pose", p); }
+  function mood(m) { setPose(m); }
+  (function blinkLoop() {
+    setTimeout(function () {
+      if (pose === "idle") {
+        judgeSvg.setAttribute("data-pose", "blink");
+        setTimeout(function () { if (pose === "idle") judgeSvg.setAttribute("data-pose", "idle"); blinkLoop(); }, 140);
+      } else {
+        blinkLoop();
+      }
+    }, 2600 + Math.random() * 3400);
+  })();
+  var readTimer = 0;
+  excuseEl.addEventListener("input", function () {
+    $("count").textContent = excuseEl.value.length + "/400";
+    if (busy) return;
+    mood("reading");
+    clearTimeout(readTimer);
+    readTimer = setTimeout(function () { if (!busy) mood("idle"); }, 1600);
+  });
+
+  /* ---------- sound ---------- */
+  var soundOn = load("ec-sound", true);
+  var ctx = null;
+  var murmurNode = null;
+  function audio() {
+    if (!soundOn) return null;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!ctx) ctx = new AC();
+    if (ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+  function noiseBuffer(c, secs, shape) {
+    var len = Math.floor(c.sampleRate * secs);
+    var buf = c.createBuffer(1, len, c.sampleRate);
+    var d = buf.getChannelData(0);
+    var last = 0;
+    for (var i = 0; i < len; i++) {
+      var w = Math.random() * 2 - 1;
+      last = shape === "brown" ? (last + 0.02 * w) / 1.02 : w;
+      d[i] = shape === "brown" ? last * 3.5 : w;
+    }
+    return buf;
+  }
+  function knock(power) {
+    var c = audio(); if (!c) return;
+    var t = c.currentTime;
+    var out = c.createGain(); out.gain.value = 0.5 + power * 0.5; out.connect(c.destination);
+    // wood crack
+    var n = c.createBufferSource(); n.buffer = noiseBuffer(c, 0.09);
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1100 - power * 300; bp.Q.value = 1.4;
+    var ng = c.createGain(); ng.gain.setValueAtTime(0.9, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    n.connect(bp); bp.connect(ng); ng.connect(out); n.start(t);
+    // body of the block
+    [190, 312, 470].forEach(function (f, i) {
+      var o = c.createOscillator(); o.type = "sine";
+      o.frequency.setValueAtTime(f * (1 - power * 0.12), t);
+      o.frequency.exponentialRampToValueAtTime(f * 0.82, t + 0.12);
+      var g = c.createGain(); g.gain.setValueAtTime([0.5, 0.25, 0.12][i], t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.14 + power * 0.1);
+      o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.3);
+    });
+    // room thump on the big one
+    if (power > 0.8) {
+      var s = c.createOscillator(); s.type = "sine";
+      s.frequency.setValueAtTime(90, t); s.frequency.exponentialRampToValueAtTime(38, t + 0.25);
+      var sg = c.createGain(); sg.gain.setValueAtTime(0.7, t); sg.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      s.connect(sg); sg.connect(out); s.start(t); s.stop(t + 0.32);
+    }
+  }
+  function stampSound() {
+    var c = audio(); if (!c) return;
+    var t = c.currentTime;
+    var n = c.createBufferSource(); n.buffer = noiseBuffer(c, 0.12);
+    var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 900;
+    var g = c.createGain(); g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    n.connect(lp); lp.connect(g); g.connect(c.destination); n.start(t);
+    var o = c.createOscillator(); o.type = "sine"; o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(50, t + 0.1);
+    var og = c.createGain(); og.gain.setValueAtTime(0.6, t); og.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+    o.connect(og); og.connect(c.destination); o.start(t); o.stop(t + 0.16);
+  }
+  function sting(guilty) {
+    var c = audio(); if (!c) return;
+    var t = c.currentTime + 0.05;
+    var notes = guilty ? [[146.8, 0], [110, 0.22]] : [[261.6, 0], [392, 0.16]];
+    notes.forEach(function (nf) {
+      [1, 1.004, 0.5].forEach(function (mult, i) {
+        var o = c.createOscillator(); o.type = guilty ? "sawtooth" : "triangle";
+        o.frequency.value = nf[0] * mult;
+        var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(guilty ? 700 : 2400, t + nf[1]); lp.frequency.exponentialRampToValueAtTime(300, t + nf[1] + 0.9);
+        var g = c.createGain(); var peak = (guilty ? 0.08 : 0.07) * (i === 2 ? 0.7 : 1);
+        g.gain.setValueAtTime(0.0001, t + nf[1]); g.gain.exponentialRampToValueAtTime(peak, t + nf[1] + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + nf[1] + 1.1);
+        o.connect(lp); lp.connect(g); g.connect(c.destination); o.start(t + nf[1]); o.stop(t + nf[1] + 1.2);
+      });
+    });
+  }
+  function murmur(on) {
+    var c = audio();
+    if (on) {
+      if (!c || murmurNode) return;
+      var src = c.createBufferSource(); src.buffer = noiseBuffer(c, 2, "brown"); src.loop = true;
+      var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 420; bp.Q.value = 0.8;
+      var g = c.createGain(); g.gain.setValueAtTime(0.0001, c.currentTime); g.gain.exponentialRampToValueAtTime(0.22, c.currentTime + 0.35);
+      var lfo = c.createOscillator(); lfo.frequency.value = 3.1; var lg = c.createGain(); lg.gain.value = 0.07; lfo.connect(lg); lg.connect(g.gain); lfo.start();
+      src.connect(bp); bp.connect(g); g.connect(c.destination); src.start();
+      murmurNode = { src: src, g: g, lfo: lfo };
+    } else if (murmurNode) {
+      var m = murmurNode; murmurNode = null;
+      var now = m.g.context.currentTime;
+      m.g.gain.cancelScheduledValues(now); m.g.gain.setValueAtTime(m.g.gain.value || 0.2, now); m.g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+      m.src.stop(now + 0.2); m.lfo.stop(now + 0.2);
+    }
+  }
+  function paintSound() {
+    var b = $("sound");
+    b.setAttribute("aria-pressed", soundOn ? "true" : "false");
+    $("soundLabel").textContent = soundOn ? "Sound on" : "Sound off";
+    $("waves").style.display = soundOn ? "" : "none";
+  }
+  $("sound").addEventListener("click", function () {
+    soundOn = !soundOn; save("ec-sound", soundOn); paintSound();
+    if (!soundOn) murmur(false); else knock(0.3);
+  });
+  paintSound();
+
+  /* ---------- juice ---------- */
+  function vibrate(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} } }
+  function dust(n) {
+    var g = $("dust");
+    var ns = "http://www.w3.org/2000/svg";
+    for (var i = 0; i < n; i++) {
+      var c = document.createElementNS(ns, "circle");
+      c.setAttribute("cx", 74 + (Math.random() * 30 - 15));
+      c.setAttribute("cy", 288);
+      c.setAttribute("r", (0.8 + Math.random() * 1.8).toFixed(1));
+      c.setAttribute("fill", Math.random() > 0.5 ? "#f3d9a8" : "#c99a62");
+      var ang = Math.PI + Math.random() * Math.PI;
+      var dist = 14 + Math.random() * 34;
+      c.style.setProperty("--dx", (Math.cos(ang) * dist).toFixed(1) + "px");
+      c.style.setProperty("--dy", (Math.sin(ang) * dist * 0.8).toFixed(1) + "px");
+      c.style.animationDelay = (Math.random() * 0.05).toFixed(2) + "s";
+      g.appendChild(c);
+    }
+    setTimeout(function () { while (g.firstChild && g.childNodes.length > 40) g.removeChild(g.firstChild); }, 800);
+    setTimeout(function () { g.innerHTML = ""; }, 1200);
+  }
+  function impact(power) {
+    setPose("strike");
+    if (power < 0.8) later(function () { setPose("idle"); }, 170);
+    knock(power);
+    dust(power > 0.8 ? 16 : 6);
+    if (power > 0.8) {
+      restart(scene, "shake");
+      restart($("flash"), "go");
+      restart(judgeSvg, "flicker");
+      vibrate([30, 30, 60]);
+    } else {
+      vibrate(15);
+    }
+  }
+  function say(text) {
+    if (!text) { caption.classList.remove("on"); return; }
+    caption.textContent = text;
+    caption.classList.add("on");
   }
 
+  /* ---------- the ruling ---------- */
+  function caseNumber(seed) { return "EC-" + (1000 + (seed % 9000)); }
+  function today() {
+    try { return new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); } catch (e) { return ""; }
+  }
   function shareText(result) {
     var shown = result.excuse || "(silence)";
     return [
@@ -599,7 +934,7 @@
       "Case " + result.caseNo,
       "Hon. June Burden presiding",
       "",
-      "Excuse: \u201C" + shown + "\u201D",
+      "Excuse: “" + shown + "”",
       "",
       "VERDICT: " + result.ruling,
       result.line,
@@ -607,90 +942,145 @@
       "Believability: " + result.score + "/100"
     ].join("\n");
   }
+  var RANKS = [[1, "First offense"], [3, "Repeat offender"], [6, "Known to the court"], [12, "Has a reserved seat"], [25, "The court has your coffee order"]];
+  function paintRecord(rec) {
+    if (!rec.n) { $("recordText").textContent = "No prior record. Yet."; return; }
+    var rank = "";
+    RANKS.forEach(function (r) { if (rec.n >= r[0]) rank = r[1]; });
+    $("recordText").innerHTML = "Your record: <b>" + rec.g + "</b> guilty · <b>" + rec.a + "</b> acquitted · <span class=\"rank\">" + rank + "</span>";
+  }
+  var record = load("ec-record", { n: 0, g: 0, a: 0 });
+  paintRecord(record);
 
-  function show(result) {
-    result.caseNo = caseNumber(result.h || hash(result.line));
-    document.getElementById("caseNo").textContent = "Case " + result.caseNo;
-    var stamp = document.getElementById("stamp");
-    stamp.textContent = result.ruling;
-    stamp.className = "stamp " + result.ruling.toLowerCase();
-    document.getElementById("charge").textContent = result.charge;
-    document.getElementById("line").textContent = result.line;
-    document.getElementById("score").innerHTML = result.score + "<span>/100</span>";
-    var meter = document.getElementById("meter");
-    meter.className = "meter " + (result.score >= 67 ? "high" : result.score >= 40 ? "mid" : "low");
-    var bar = document.getElementById("meterBar");
-    bar.style.width = result.score + "%";
-    verdictEl.hidden = false;
-    verdictEl.classList.remove("slam");
-    void verdictEl.offsetWidth;
-    verdictEl.classList.add("slam");
-    shareBtn.hidden = false;
-    copyNote.hidden = true;
-    manual.hidden = true;
-    lastShare = shareText(result);
-    shareBtn.textContent = "Share this ruling";
-    bangBtn.disabled = false;
-    bangBtn.textContent = "Rule again";
-    verdictEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
+  function countUp(el, to, ms) {
+    if (reduced()) { el.innerHTML = to + "<span>/100</span>"; return; }
+    var start = performance.now();
+    (function step(now) {
+      var k = Math.min(1, (now - start) / ms);
+      var e = 1 - Math.pow(1 - k, 3);
+      el.innerHTML = Math.round(to * e) + "<span>/100</span>";
+      if (k < 1) requestAnimationFrame(step);
+    })(start);
+  }
+  function tilt(score) {
+    var deg = (score - 50) / 50 * 16;
+    var rad = deg * Math.PI / 180;
+    var dy = Math.sin(rad) * 52;
+    var dx = (1 - Math.cos(rad)) * 52;
+    $("beam").style.transform = "rotate(" + deg + "deg)";
+    $("panL").style.transform = "translate(" + dx.toFixed(1) + "px," + (-dy).toFixed(1) + "px)";
+    $("panR").style.transform = "translate(" + (-dx).toFixed(1) + "px," + dy.toFixed(1) + "px)";
   }
 
-  function thud() {
-    var AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) return;
-    if (!thud.ctx) thud.ctx = new AC();
-    var ctx = thud.ctx;
-    if (ctx.state === "suspended") ctx.resume();
-    var t = ctx.currentTime;
-    var len = Math.floor(ctx.sampleRate * 0.12);
-    var buffer = ctx.createBuffer(1, len, ctx.sampleRate);
-    var data = buffer.getChannelData(0);
-    for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
-    var noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    var filter = ctx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 380;
-    var gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.55, t);
-    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-    noise.start(t);
-    var osc = ctx.createOscillator();
-    var g2 = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(150, t);
-    osc.frequency.exponentialRampToValueAtTime(42, t + 0.11);
-    g2.gain.setValueAtTime(0.4, t);
-    g2.gain.exponentialRampToValueAtTime(0.01, t + 0.14);
-    osc.connect(g2);
-    g2.connect(ctx.destination);
-    osc.start(t);
-    osc.stop(t + 0.15);
+  function fillDoc(result) {
+    result.caseNo = caseNumber(result.h || hash(result.line));
+    $("caseNo").textContent = "Case No. " + result.caseNo;
+    $("caseDate").textContent = today();
+    $("charge").textContent = result.charge;
+    $("line").textContent = result.line;
+    var stamp = $("stamp");
+    stamp.textContent = result.ruling;
+    stamp.className = "stamp " + result.ruling.toLowerCase();
+    $("score").innerHTML = "0<span>/100</span>";
+    $("meter").className = "meter " + (result.score >= 67 ? "high" : result.score >= 40 ? "mid" : "low");
+    $("meterBar").style.width = "0";
+    $("sig").classList.remove("on");
+    tilt(50);
+    lastShare = shareText(result);
+  }
+
+  function reveal(result) {
+    var r = reduced();
+    var guilty = result.ruling === "GUILTY";
+    verdictEl.hidden = false;
+    restart(verdictEl, "in");
+    shareBtn.hidden = true;
+    copyNote.hidden = true;
+    manual.hidden = true;
+    var rect = verdictEl.getBoundingClientRect();
+    if (rect.top > window.innerHeight * 0.45 || rect.top < 0) {
+      verdictEl.scrollIntoView({ behavior: r ? "auto" : "smooth", block: "start" });
+    }
+    later(function () {
+      var stamp = $("stamp");
+      stamp.classList.add("on");
+      if (!r) restart(stamp, "slam");
+      later(function () {
+        stampSound(); vibrate(40);
+        restart(verdictEl, "thump");
+        mood(guilty ? "guilty" : "acquitted");
+        sting(guilty);
+      }, r ? 0 : 360);
+    }, r ? 0 : 520);
+    later(function () {
+      countUp($("score"), result.score, 900);
+      $("meterBar").style.width = result.score + "%";
+      tilt(result.score);
+    }, r ? 0 : 1000);
+    later(function () {
+      $("sig").classList.add("on");
+      shareBtn.hidden = false;
+      $("shareLabel").textContent = "Share this ruling";
+      bangBtn.disabled = false;
+      $("bangLabel").textContent = "Rule again";
+      busy = false;
+      record.n += 1; if (guilty) record.g += 1; else record.a += 1;
+      save("ec-record", record); paintRecord(record);
+    }, r ? 0 : 1500);
+  }
+
+  function trial(text) {
+    if (busy) return;
+    busy = true;
+    clearLater();
+    clearTimeout(readTimer);
+    var r = reduced();
+    var result = judge(text);
+    bangBtn.disabled = true;
+    $("bangLabel").textContent = "Order in the court";
+    if (!verdictEl.hidden) verdictEl.classList.remove("in");
+    mood("reading");
+    if (r) {
+      fillDoc(result); knock(1); reveal(result); return;
+    }
+    // 1. she reads it
+    say("The court deliberates…");
+    murmur(true);
+    later(function () {
+      // 2. order, order, ORDER
+      murmur(false);
+      say("");
+      setPose("idle");
+      later(function () { impact(0.3); }, 180);
+      later(function () { impact(0.5); }, 480);
+      later(function () { impact(1); fillDoc(result); }, 870);
+      later(function () { reveal(result); }, 1250);
+    }, 1100);
   }
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var result = judge(excuseEl.value);
-    clearTimeout(timer);
-    bangBtn.disabled = true;
-    bench.classList.remove("is-banging");
-    void bench.offsetWidth;
-    bench.classList.add("is-banging");
-    if (!reduce) thud();
-    timer = setTimeout(function () { show(result); }, reduce ? 40 : 700);
+    trial(excuseEl.value);
+  });
+  excuseEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); trial(excuseEl.value); }
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (chip) {
+    chip.addEventListener("click", function () {
+      if (busy) return;
+      excuseEl.value = chip.textContent;
+      $("count").textContent = excuseEl.value.length + "/400";
+      trial(excuseEl.value);
+    });
   });
 
+  /* ---------- sharing ---------- */
   function markCopied() {
-    shareBtn.textContent = "Copied to the record";
+    $("shareLabel").textContent = "Copied to the record";
     copyNote.hidden = false;
     copyNote.textContent = "Copied. The group chat may now deliberate.";
     manual.hidden = true;
   }
-
   function syncCopy(text) {
     var area = document.createElement("textarea");
     area.value = text;
@@ -709,15 +1099,9 @@
     document.body.removeChild(area);
     return ok;
   }
-
-  shareBtn.addEventListener("click", function () {
-    if (!lastShare) return;
+  function copyShare() {
     var done = false;
-    function succeed() {
-      if (done) return;
-      done = true;
-      markCopied();
-    }
+    function succeed() { if (done) return; done = true; markCopied(); }
     function giveUp() {
       if (done) return;
       done = true;
@@ -729,12 +1113,21 @@
     var synced = syncCopy(lastShare);
     if (synced) succeed();
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(lastShare).then(succeed).catch(function () {
-        if (!synced) giveUp();
-      });
+      navigator.clipboard.writeText(lastShare).then(succeed).catch(function () { if (!synced) giveUp(); });
     } else if (!synced) {
       giveUp();
     }
+  }
+  var touchy = window.matchMedia("(pointer: coarse)").matches;
+  shareBtn.addEventListener("click", function () {
+    if (!lastShare) return;
+    if (touchy && navigator.share) {
+      navigator.share({ title: "Excuse Court", text: lastShare }).catch(function (err) {
+        if (!err || err.name !== "AbortError") copyShare();
+      });
+      return;
+    }
+    copyShare();
   });
 })();
 </script>
