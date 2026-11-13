@@ -305,6 +305,42 @@
   footer a { color: #e2c78c; }
   [hidden] { display: none !important; }
 
+  /* ---------- today's docket ---------- */
+  .modes { display: flex; gap: 6px; margin: 18px 0 12px; padding: 4px; border-radius: 12px; background: rgba(20, 8, 4, 0.55); border: 1px solid rgba(217, 180, 90, 0.3); }
+  .mode { flex: 1; min-height: 38px; border: 0; border-radius: 9px; background: transparent; color: #c9ad80; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; transition: background .2s, color .2s; }
+  .mode.on { background: linear-gradient(180deg, #f3d98f, #c99a45); color: #2a1706; box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 2px 0 #5a3a0f; }
+  .mode:not(.on):hover { color: var(--gold-hi); }
+  .dk-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin: 0 0 10px; }
+  .dk-title { font-family: var(--engraved); font-weight: 700; letter-spacing: .14em; font-size: 13px; color: var(--gold); text-transform: uppercase; }
+  .dk-date { font-family: var(--display); font-style: italic; color: #e8d3ac; font-size: 15px; }
+  .dk-seals { display: flex; gap: 8px; margin: 0 0 12px; }
+  .dk-seal { flex: 1; min-width: 0; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--stamp); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid rgba(217, 180, 90, .35); color: #c9ad80; background: rgba(255, 230, 180, .05); }
+  .dk-seal.a { background: #17734a; color: #eaf7ee; border-color: #2a9a66; }
+  .dk-seal.g { background: #a3182a; color: #fbe9ea; border-color: #c63a4b; }
+  .dk-seal.now { border: 2px solid var(--gold-hi); color: var(--gold-hi); box-shadow: 0 0 16px rgba(246, 226, 164, .3); }
+  .dk-seal .s { display: none; font-family: var(--serif); font-size: 17px; }
+  @media (max-width: 559px) { .dk-seal .w { display: none; } .dk-seal .s { display: inline; } }
+  .dk-case { margin: 0 0 14px; padding: 12px 16px; border-radius: 10px; background: rgba(20, 8, 4, .55); border: 1px solid rgba(217, 180, 90, .4); }
+  .dk-case small { display: block; font-family: var(--engraved); font-weight: 700; letter-spacing: .12em; font-size: 11px; color: var(--gold); text-transform: uppercase; }
+  .dk-case p { margin: 4px 0 0; font-family: var(--display); font-weight: 700; font-size: 20px; line-height: 1.3; color: var(--cream); }
+  .dk-case em { display: block; margin-top: 6px; font-size: 13px; color: #c9ad80; }
+  .m-free #docket, .m-docket .tries { display: none; }
+  .ruled form, .ruled .tries, .ruled #docket,
+  .closed form, .closed .tries, .closed #docket { display: none; }
+  .actions { display: flex; gap: 12px; margin-top: 14px; }
+  .actions .gold-btn, .actions .ghost-btn { flex: 1; margin: 0; min-height: 56px; font-size: 16px; }
+  .actions [hidden] { display: none !important; }
+  .closed-doc { text-align: center; padding: 24px 24px 22px; }
+  .closed-doc .finds { margin-top: 10px; font-size: 20px; }
+  .cl-score { margin: 6px 0 0; font-family: var(--stamp); font-size: 66px; line-height: 1.05; letter-spacing: .03em; text-transform: uppercase; }
+  .cl-score.good { color: var(--acquit); }
+  .cl-score.bad { color: var(--guilty); }
+  .closed-doc .matter { margin: 0; text-align: center; }
+  .closed-doc .dk-seals { margin: 16px 0 14px; }
+  .closed-doc .line { margin: 0; font-size: 16px; }
+  .cl-meta { margin: 10px 0 0; font-size: 13.5px; color: #7a5b3a; }
+  @media (max-width: 559px) { .actions .gold-btn, .actions .ghost-btn { font-size: 14px; letter-spacing: .06em; gap: 8px; } }
+
   @media (min-width: 560px) {
     .stage { margin: 18px 0 0; }
     .scene { border-radius: 14px; border: 1px solid rgba(246, 226, 164, 0.2); }
@@ -456,8 +492,17 @@
   </div>
   </div>
 
-  <div class="right">
+  <div class="right m-docket" id="right">
   <div class="bar">
+    <div class="modes" role="tablist" aria-label="Game mode">
+      <button type="button" class="mode on" id="modeDocket" role="tab" aria-selected="true">Today's docket</button>
+      <button type="button" class="mode" id="modeFree" role="tab" aria-selected="false">Free play</button>
+    </div>
+    <div id="docket">
+      <div class="dk-head"><span class="dk-title" id="dkTitle">Docket No. 1</span><span class="dk-date" id="dkDate"></span></div>
+      <div class="dk-seals" id="dkSeals"></div>
+      <div class="dk-case"><small id="dkNum">Case 1 of 5</small><p id="dkText"></p><em>Each excuse works once per docket. The bench remembers.</em></div>
+    </div>
     <form id="form">
       <div class="sheet">
         <label for="excuse">Sworn statement <small id="count">0/400</small></label>
@@ -484,7 +529,7 @@
           <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="none" stroke="#5a3d20" stroke-width="1.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#5a3d20" stroke-width=".8"/><path d="M22 10l3 8h8l-6.5 5 2.5 8-7-5-7 5 2.5-8-6.5-5h8z" fill="#5a3d20"/></svg>
         </div>
         <div class="doc-meta"><span id="caseNo"></span><span id="caseDate"></span></div>
-        <p class="matter">In the matter of the excuse</p>
+        <p class="matter" id="matter">In the matter of the excuse</p>
         <p class="charge" id="charge"></p>
         <p class="finds">The court finds this excuse</p>
         <div class="stamp-wrap"><p class="stamp" id="stamp"></p></div>
@@ -507,10 +552,28 @@
       </article>
     </section>
 
-    <button type="button" id="share" class="ghost-btn" hidden>
+    <section id="closed" hidden aria-live="polite">
+      <article class="doc closed-doc">
+        <p class="doc-court">Municipal Docket of Weak Reasons</p>
+        <p class="finds">Today's docket is closed.</p>
+        <p class="cl-score" id="clScore"></p>
+        <p class="matter">Acquitted</p>
+        <div class="dk-seals" id="clSeals"></div>
+        <p class="line" id="clLine"></p>
+        <p class="cl-meta" id="clMeta"></p>
+      </article>
+    </section>
+
+    <div class="actions" id="actions">
+      <button type="button" id="next" class="gold-btn" hidden>
+        <svg viewBox="0 0 32 32" aria-hidden="true"><g transform="rotate(-35 16 16)"><rect x="5" y="6" width="18" height="9" rx="2.5" fill="#3a2006"/><rect x="12.5" y="14" width="3.5" height="14" rx="1.6" fill="#3a2006"/></g><rect x="17" y="26" width="13" height="3.5" rx="1.5" fill="#3a2006"/></svg>
+        <span id="nextLabel">Next case</span>
+      </button>
+      <button type="button" id="share" class="ghost-btn" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/></svg>
       <span id="shareLabel">Share this ruling</span>
-    </button>
+      </button>
+    </div>
     <p id="copyNote" hidden></p>
     <pre id="manual" hidden></pre>
 
@@ -640,6 +703,86 @@
   ];
 
 
+  /* ---------- today's docket: five charges a day, the same five for everyone ---------- */
+  // "no" names an excuse (by its first key in VERDICTS) that cannot work for this charge, and why.
+  var CASES = [
+    { t: "You missed the Monday 9 AM team meeting.", no: {
+      "wedding": "Nobody gets married at 9 AM on a Monday. The court checked. Twice. Guilty. Sentence: one calendar invite, accepted, attended.",
+      "a bear": "A bear in the office park at nine on a Monday would have made the news. The news is silent. Guilty. Sentence: the bear is dismissed as a witness." } },
+    { t: "You skipped your best friend's wedding. You were giving the toast.", no: {
+      "wedding": "You cannot miss a wedding because of a different wedding. The court admires the nerve, not the logic. Guilty. Sentence: give the toast at their anniversary.",
+      "my computer": "The toast was spoken out loud. Your laptop was not invited. Guilty. Sentence: memorize three sentences and a hug." } },
+    { t: "Your library book is eleven months overdue.", no: {
+      "snowed in": "No storm lasts eleven months. The court has looked out a window. Guilty. Sentence: return it, and do not make eye contact with the librarian.",
+      "my flight": "Eleven months is not a layover. It is a lifestyle. Guilty. Sentence: the book comes home before you do." } },
+    { t: "You never replied to the group chat about the trip.", no: {
+      "power outage": "Your phone has a battery. The court has seen you online at 3 AM. Guilty. Sentence: reply with more than a thumbs-up.",
+      "jury duty": "Jurors may not discuss the case. They may absolutely reply to a group chat. Guilty. Sentence: vote on the dates. Any dates." } },
+    { t: "You showed up to the potluck with nothing but a fork.", no: {
+      "dentist": "A root canal explains not eating. It does not explain not bringing. Guilty. Sentence: next potluck, you bring the dessert and the fork.",
+      "my flight": "You were home all day. The fork was clean. Guilty. Sentence: one casserole, any casserole." } },
+    { t: "You forgot a family birthday. Again.", no: {
+      "my flight": "Airports sell cards at every single gate. The court has been to a gate. Guilty. Sentence: a card, a call, and a calendar alert set for next year.",
+      "my computer": "Birthdays are not stored on a hard drive. Guilty. Sentence: write it on paper. Paper does not blue-screen." } },
+    { t: "You turned in the group project at 11:59 PM, without your part.", no: {
+      "wedding": "The wedding was one Saturday. The project was due for three weeks. Guilty. Sentence: you present the slides nobody wants.",
+      "migraine": "A migraine lasts a day. This project lasted a semester. Guilty. Sentence: do your part, and the conclusion slide." } },
+    { t: "The houseplant you promised to water is now a stick.", no: {
+      "snowed in": "The plant lives indoors. So, it turns out, do you. Guilty. Sentence: buy a new plant and introduce it to a watering can.",
+      "my flight": "You never left town. The plant watched you walk past it every day. Guilty. Sentence: an apology to the stick." } },
+    { t: "You were seen at the mall on your sick day.", no: {
+      "the flu": "The flu does not try on shoes. Security footage disagrees with your fever. Guilty. Sentence: the shoes go back. So do you, to work.",
+      "covid": "Quarantine does not include the food court. Guilty. Sentence: an honest day off, requested in advance." } },
+    { t: "You missed your own surprise party.", no: {
+      "jury duty": "Courts close on Saturday night. This one included. Guilty. Sentence: you throw the next party, and act surprised.",
+      "plumber": "The party was at your place. The plumber would have been a guest. Guilty. Sentence: thank everyone who hid behind your couch." } },
+    { t: "You returned a friend's car with an empty tank.", no: {
+      "my flight": "The car never went near an airport. The odometer has testified. Guilty. Sentence: a full tank, and a car wash.",
+      "a bear": "Bears do not drink gasoline. The court consulted a park ranger. Guilty. Sentence: fill it up, and the air freshener too." } },
+    { t: "You left the dishes “soaking” for nine days.", no: {
+      "broke up": "Heartbreak explains one night of dishes. Not nine. Not the pan. Guilty. Sentence: the pan, tonight, with soap.",
+      "dentist": "Your teeth recovered in a day. The pan did not. Guilty. Sentence: scrub until the pan forgives you." } },
+    { t: "You were late to your own job interview.", no: {
+      "wedding": "You booked an interview on a wedding day. The court rejects both the planning and this plea. Guilty. Sentence: a thank-you note, on time.",
+      "migraine": "The migraine started, conveniently, at 8:55. Guilty. Sentence: leave an hour early, like an adult with a map." } },
+    { t: "You missed your dentist appointment.", no: {
+      "dentist": "You cannot miss the dentist because of the dentist. Unless there are two. There are not two. Guilty. Sentence: floss, then reschedule.",
+      "food poisoning": "Food poisoning is a reason to see a doctor, not to skip one. Guilty. Sentence: open wide, next Tuesday." } },
+    { t: "You didn't show up to help a friend move.", no: {
+      "moving day": "You were helping someone else move. The court calls that a betrayal with extra boxes. Guilty. Sentence: you carry the couch next time.",
+      "my cat": "The cat did not need help carrying a couch. Guilty. Sentence: pizza for the crew, and the heavy end." } },
+    { t: "Your roommate's leftovers vanished overnight.", no: {
+      "food poisoning": "Eating the evidence and getting sick from it is a confession with symptoms. Guilty. Sentence: replace the pad thai, extra spicy.",
+      "alien": "Aliens do not crave pad thai. The fork in your sink says otherwise. Guilty. Sentence: label your own food and leave theirs alone." } },
+    { t: "You slept through the final exam.", no: {
+      "power outage": "The exam was at 2 PM. The sun was on. Rooms have windows. Guilty. Sentence: two alarms, across the room.",
+      "my flight": "The exam was across campus, not across the country. Guilty. Sentence: retake it, wide awake." } },
+    { t: "You missed the bus for the school field trip.", no: {
+      "snowed in": "The field trip was to the beach. In June. Guilty. Sentence: you write the trip report from photos.",
+      "dentist": "Dentists do not open at 6 AM. The court called one. Guilty. Sentence: next time, sleep in your shoes." } },
+    { t: "You canceled movie night for the fourth time.", no: {
+      "covid": "Four times in one month. No virus is that dedicated to you. Guilty. Sentence: you pick the movie, and you show up for it.",
+      "migraine": "Four migraines, all at 7 PM, all on movie night. The court sees a pattern. Guilty. Sentence: popcorn duty, for life." } },
+    { t: "You forgot to pick up the cake for the party.", no: {
+      "my cat": "The cat does not have the car keys. The court asked. Guilty. Sentence: buy the cake, carry the cake, do not drop the cake.",
+      "jury duty": "Bakeries are open after court lets out. Guilty. Sentence: two cakes. The court is hungry." } },
+    { t: "You missed the deadline on your taxes.", no: {
+      "alien": "The tax office accepts many things. Abduction is not one of them. There is no form. Guilty. Sentence: file tonight, pay the fee.",
+      "my flight": "The forms are online. Airports have Wi-Fi. Sadly. Guilty. Sentence: file before your next boarding call." } },
+    { t: "You no-showed your 4 AM shift at the bakery.", no: {
+      "the doctor": "The doctor's office opens at nine. Your shift started at four. Guilty. Sentence: the first batch of croissants is yours to burn.",
+      "a bear": "The bakery is downtown. The bear lives forty miles away. Guilty. Sentence: an early alarm and a late apology." } },
+    { t: "The group gift you collected money for never appeared.", no: {
+      "power outage": "Gift cards survive blackouts. The court suspects the snack aisle did not. Guilty. Sentence: buy the gift, with interest.",
+      "moving day": "Moving takes a weekend. This took two months. Guilty. Sentence: the gift, a receipt, and a group apology." } },
+    { t: "You arrived at the wedding after the vows.", no: {
+      "wedding": "Yes. That is exactly where you were supposed to be. Guilty. Sentence: dance with every aunt, no complaints.",
+      "jury duty": "Juries do not sit on Saturdays. This court checked its own schedule. Guilty. Sentence: give a toast. A short one." } },
+    { t: "You missed your turn to bring snacks to practice.", no: {
+      "my computer": "Snacks are not downloaded. They are carried. Guilty. Sentence: orange slices for the rest of the season.",
+      "plumber": "The plumber fixed the sink, not the snack schedule. Guilty. Sentence: two weeks of snacks, starting Saturday." } }
+  ];
+
   function hash(s) {
     var h = 2166136261;
     for (var i = 0; i < s.length; i++) {
@@ -725,6 +868,7 @@
       charge: "\u201C" + clip + "\u201D",
       line: typeof best.line === "function" ? best.line(text) : best.line,
       excuse: trimmed,
+      cat: best.keys[0],
       h: h
     };
   }
@@ -977,6 +1121,7 @@
     result.caseNo = caseNumber(result.h || hash(result.line));
     $("caseNo").textContent = "Case No. " + result.caseNo;
     $("caseDate").textContent = today();
+    $("matter").textContent = result.caseNum ? "Case " + result.caseNum + " of 5 \u00B7 In the matter of the excuse" : "In the matter of the excuse";
     $("charge").textContent = result.charge;
     $("line").textContent = result.line;
     var stamp = $("stamp");
@@ -994,6 +1139,8 @@
     var r = reduced();
     var guilty = result.ruling === "GUILTY";
     verdictEl.hidden = false;
+    right.classList.add("ruled");
+    $("next").hidden = true;
     restart(verdictEl, "in");
     shareBtn.hidden = true;
     copyNote.hidden = true;
@@ -1023,8 +1170,8 @@
       shareBtn.hidden = false;
       $("shareLabel").textContent = "Share this ruling";
       bangBtn.disabled = false;
-      $("bangLabel").textContent = "Rule again";
       busy = false;
+      afterRuling(result);
       record.n += 1; if (guilty) record.g += 1; else record.a += 1;
       save("ec-record", record); paintRecord(record);
     }, r ? 0 : 1500);
@@ -1036,7 +1183,7 @@
     clearLater();
     clearTimeout(readTimer);
     var r = reduced();
-    var result = judge(text);
+    var result = docketRule(judge(text));
     bangBtn.disabled = true;
     $("bangLabel").textContent = "Order in the court";
     if (!verdictEl.hidden) verdictEl.classList.remove("in");
@@ -1074,6 +1221,199 @@
       trial(excuseEl.value);
     });
   });
+
+  /* ---------- docket state ---------- */
+  var mode = "docket";
+  var nextAction = "again";
+  var right = $("right");
+  var hooks = window.EC_HOOKS || {};
+  function hook(name, arg) { try { if (hooks[name]) hooks[name](arg); } catch (e) {} }
+  function dayKey(d) { d = d || new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
+  function rng(seed) {
+    return function () {
+      seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function docketFor(key) {
+    // seeded by the date, never by Math.random, so everyone gets the same five
+    var r = rng(hash("docket " + key));
+    var idx = CASES.map(function (_, i) { return i; });
+    for (var i = idx.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+    return idx.slice(0, 5);
+  }
+  var EPOCH = Date.UTC(2026, 10, 13);
+  function docketNo() { var d = new Date(); return Math.max(1, Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - EPOCH) / 864e5) + 1); }
+  function freshDocket() { var k = dayKey(); return { day: k, cases: docketFor(k), res: [] }; }
+  var dk = load("ec-docket", null);
+  if (!dk || dk.day !== dayKey() || !dk.res || !dk.cases) dk = freshDocket();
+  function acquits() { return dk.res.filter(function (r) { return r.r === "A"; }).length; }
+  function longDate() {
+    try { return new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }); } catch (e) { return ""; }
+  }
+  function sealsHtml(withCurrent) {
+    var h = "";
+    for (var i = 0; i < 5; i++) {
+      var r = dk.res[i];
+      if (r) h += '<span class="dk-seal ' + (r.r === "A" ? "a" : "g") + '"><span class="w">' + (r.r === "A" ? "Acquitted" : "Guilty") + '</span><span class="s" aria-hidden="true">' + (r.r === "A" ? "✓" : "✗") + "</span></span>";
+      else if (withCurrent && i === dk.res.length) h += '<span class="dk-seal now">Case ' + (i + 1) + "</span>";
+      else h += '<span class="dk-seal">' + (i + 1) + "</span>";
+    }
+    return h;
+  }
+  function renderDocket() {
+    if (dk.day !== dayKey()) { dk = freshDocket(); save("ec-docket", dk); }
+    var n = dk.res.length;
+    $("dkTitle").textContent = "Docket No. " + docketNo();
+    $("dkDate").textContent = longDate();
+    $("dkSeals").innerHTML = sealsHtml(true);
+    if (n < 5) {
+      $("dkNum").textContent = "Case " + (n + 1) + " of 5 · The charge";
+      $("dkText").textContent = CASES[dk.cases[n]].t;
+    }
+  }
+  function docketRule(result) {
+    if (mode !== "docket" || dk.res.length >= 5) return result;
+    var c = CASES[dk.cases[dk.res.length]];
+    result.caseNum = dk.res.length + 1;
+    var said = norm(result.excuse || "");
+    var used = -1;
+    for (var i = 0; i < dk.res.length; i++) {
+      var p = dk.res[i];
+      if ((result.cat && p.cat === result.cat) || (said && p.x === said)) { used = i; break; }
+    }
+    var h = result.h || hash(said);
+    if (used >= 0) {
+      result.ruling = "GUILTY";
+      result.score = 4 + (h % 6);
+      result.line = "This court heard that excuse on case " + (used + 1) + " of this very docket. It did not improve with reheating. Guilty. Sentence: a fresh excuse for every charge.";
+    } else if (result.cat && c.no && c.no[result.cat]) {
+      result.ruling = "GUILTY";
+      result.score = 9 + (h % 10);
+      result.line = c.no[result.cat];
+    }
+    return result;
+  }
+  var CLOSING = [
+    "Five charges, five convictions. The court has never been so sure of anything. Come back tomorrow, counselor.",
+    "One acquittal. The court will have it framed. Tomorrow brings five new charges.",
+    "Two acquittals. Not a defense yet, but the outline of one.",
+    "Three of five. The court is troubled by how good you are at this.",
+    "Four acquittals. The bailiff has started taking notes on your technique.",
+    "A perfect docket. The court is impressed and deeply suspicious. Same time tomorrow."
+  ];
+  function countdown() {
+    var now = new Date(), mid = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    var m = Math.max(1, Math.ceil((mid - now) / 60000));
+    return (m >= 60 ? Math.floor(m / 60) + "h " : "") + (m % 60) + "m";
+  }
+  function closedMeta() {
+    var st = load("ec-streak", { last: "", n: 0 });
+    var days = st.last === dk.day ? st.n : 0;
+    return (days > 1 ? days + " days in court in a row · " : "") + "New docket in " + countdown();
+  }
+  function docketShare() {
+    var a = acquits();
+    var grid = dk.res.map(function (r) { return r.r === "A" ? "🟩" : "🟥"; }).join("");
+    return ["EXCUSE COURT · Docket No. " + docketNo(), grid + "  " + a + " of 5 acquitted", "Hon. June Burden presiding"].join("\n");
+  }
+  function closeTheBooks() {
+    var st = load("ec-streak", { last: "", n: 0 });
+    if (st.last !== dk.day) {
+      var y = new Date(); y.setDate(y.getDate() - 1);
+      st.n = st.last === dayKey(y) ? st.n + 1 : 1;
+      st.last = dk.day;
+      save("ec-streak", st);
+    }
+    if (acquits() === 5) hook("perfect");
+  }
+  function afterRuling(result) {
+    if (mode === "docket" && result.caseNum) {
+      dk.res.push({ r: result.ruling === "GUILTY" ? "G" : "A", cat: result.cat || null, x: norm(result.excuse || "") });
+      save("ec-docket", dk);
+      if (dk.res.length >= 5) { closeTheBooks(); nextAction = "closed"; $("nextLabel").textContent = "Close the docket"; }
+      else { nextAction = "case"; $("nextLabel").textContent = "Next case"; }
+    } else {
+      nextAction = "again"; $("nextLabel").textContent = "Next excuse";
+    }
+    $("next").hidden = false;
+    hook("ruled", result);
+  }
+  function clearRuling() {
+    clearLater();
+    right.classList.remove("ruled", "closed");
+    verdictEl.hidden = true;
+    $("closed").hidden = true;
+    shareBtn.hidden = true;
+    $("next").hidden = true;
+    copyNote.hidden = true;
+    manual.hidden = true;
+  }
+  function showForm() {
+    clearRuling();
+    excuseEl.value = "";
+    $("count").textContent = "0/400";
+    if (mode === "docket") {
+      renderDocket();
+      $("bangLabel").textContent = "Plead case " + (dk.res.length + 1);
+      excuseEl.placeholder = "Your Honor, in my defense…";
+    } else {
+      $("bangLabel").textContent = "Bang the gavel";
+      excuseEl.placeholder = "The dog ate my Wi-Fi, Your Honor, and the bus was emotionally unavailable.";
+    }
+    bangBtn.disabled = false;
+    setPose("idle");
+  }
+  var closedTimer = 0;
+  function showClosed() {
+    clearRuling();
+    right.classList.add("closed");
+    var a = acquits();
+    var sc = $("clScore");
+    sc.textContent = a + " of 5";
+    sc.className = "cl-score " + (a >= 3 ? "good" : "bad");
+    $("clSeals").innerHTML = sealsHtml(false);
+    $("clLine").textContent = CLOSING[a];
+    $("clMeta").textContent = closedMeta();
+    $("closed").hidden = false;
+    lastShare = docketShare();
+    shareBtn.hidden = false;
+    $("shareLabel").textContent = "Share my docket";
+    nextAction = "free";
+    $("nextLabel").textContent = "Free play";
+    $("next").hidden = false;
+    clearInterval(closedTimer);
+    closedTimer = setInterval(function () {
+      if ($("closed").hidden) { clearInterval(closedTimer); return; }
+      if (dk.day !== dayKey()) { clearInterval(closedTimer); dk = freshDocket(); save("ec-docket", dk); setMode("docket"); return; }
+      $("clMeta").textContent = closedMeta();
+    }, 30000);
+    mood(a >= 3 ? "acquitted" : "guilty");
+  }
+  function setMode(m) {
+    if (busy) return;
+    mode = m;
+    $("modeDocket").setAttribute("aria-selected", m === "docket" ? "true" : "false");
+    $("modeFree").setAttribute("aria-selected", m === "free" ? "true" : "false");
+    $("modeDocket").classList.toggle("on", m === "docket");
+    $("modeFree").classList.toggle("on", m === "free");
+    right.classList.toggle("m-docket", m === "docket");
+    right.classList.toggle("m-free", m === "free");
+    if (m === "docket" && dk.day !== dayKey()) { dk = freshDocket(); save("ec-docket", dk); }
+    if (m === "docket" && dk.res.length >= 5) showClosed(); else showForm();
+  }
+  $("modeDocket").addEventListener("click", function () { setMode("docket"); });
+  $("modeFree").addEventListener("click", function () { setMode("free"); });
+  $("next").addEventListener("click", function () {
+    if (busy) return;
+    if (nextAction === "closed") { showClosed(); return; }
+    if (nextAction === "free") { setMode("free"); return; }
+    showForm();
+    if (!window.matchMedia("(pointer: coarse)").matches) { try { excuseEl.focus({ preventScroll: true }); } catch (e) {} }
+  });
+  setMode("docket");
 
   /* ---------- sharing ---------- */
   function markCopied() {
