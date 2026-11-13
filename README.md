@@ -2,7 +2,7 @@
 
 **Your excuse is on trial. The judge has heard worse. Not often.**
 
-![Excuse Court: the Honorable June Burden at her bench, and a stamped GUILTY ruling](screenshot.jpg)
+![Excuse Court: the Honorable June Burden at her bench, with case 1 of Today's docket](screenshot.jpg)
 
 Type the reason you were late, missed it, or forgot. The Honorable June Burden reads it, bangs the gavel, stamps a ruling (guilty or acquitted), gives it a Believability score and signs it. Then you can share the ruling.
 
