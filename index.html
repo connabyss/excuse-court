@@ -247,6 +247,7 @@
   .doc-court { margin: 0; font-family: var(--engraved); font-weight: 700; font-size: 11.5px; letter-spacing: 0.12em; color: #5a3d20; line-height: 1.5; }
   .doc-meta { display: flex; justify-content: space-between; margin: 12px 4px 0; padding: 8px 0; border-top: 2px solid #5a3d20; border-bottom: 1px solid #5a3d20; font-family: var(--type); font-size: 13px; color: #4a3424; }
   .matter { margin: 14px 4px 0; font-family: var(--engraved); font-weight: 700; font-size: 11px; letter-spacing: .14em; color: #7a5b3a; }
+  .charge-of { margin: 3px 4px 0; font-family: var(--display); font-style: italic; font-size: 15px; line-height: 1.3; color: #3b2a18; }
   .charge { margin: 4px 4px 0; font-family: var(--type); font-size: 17px; line-height: 1.45; color: #1d2a4a; overflow-wrap: anywhere; }
   .finds { margin: 18px 0 0; text-align: center; font-family: var(--display); font-style: italic; font-size: 17px; color: #4a3424; }
   .stamp-wrap { display: flex; justify-content: center; min-height: 120px; align-items: center; margin: 14px 0 14px; }
@@ -530,6 +531,7 @@
         </div>
         <div class="doc-meta"><span id="caseNo"></span><span id="caseDate"></span></div>
         <p class="matter" id="matter">In the matter of the excuse</p>
+        <p class="charge-of" id="chargeOf" hidden></p>
         <p class="charge" id="charge"></p>
         <p class="finds">The court finds this excuse</p>
         <div class="stamp-wrap"><p class="stamp" id="stamp"></p></div>
@@ -681,6 +683,8 @@
       line: "The clocks changed for the entire time zone, including people who still showed up and made eye contact. Guilty. Sentence: learn which way spring goes. It is once a year, not a riddle." },
     { p: 20, ruling: "ACQUITTED", score: 55, keys: ["a bear", "the bear", "moose", "raccoon", "coyote", "possum", "opossum", "wild turkey", "a skunk", "the skunk"],
       line: "You lost an argument to a raccoon and I have no follow-up questions. That is precedent. Acquitted. Sentence: surrender the trash can. Dignity left with the raccoon, in a bag, at speed." },
+    { p: 20, ruling: "ACQUITTED", score: 60, keys: ["mugged", "got robbed", "was robbed", "been robbed", "pickpocketed", "pick pocketed", "stole my wallet", "stole my phone", "wallet was stolen", "phone was stolen", "wallet got stolen", "phone got stolen", "carjacked"],
+      line: "You were robbed, and the court is genuinely sorry. The court also notes there is no police report, no bruise and no detail in this file. Acquitted on sympathy, with one eyebrow raised. Sentence: file the report, then bring it next time." },
     { p: 14, ruling: "GUILTY", score: 13, keys: ["procrastinating", "procrastinate", "procrastinated", "the deadline", "my homework", "the homework", "the assignment", "my assignment", "lost track of"],
       line: "The deadline did not sneak up. It walked in wearing a name tag and you offered it a drink. Guilty. Sentence: start the work before the work opens a case, because the work has a better lawyer." },
     { p: 10, ruling: "GUILTY", score: 26, keys: ["running late", "im late", "i am late", "was late", "showed up late", "got there late", "late again"],
@@ -783,6 +787,260 @@
       "plumber": "The plumber fixed the sink, not the snack schedule. Guilty. Sentence: two weeks of snacks, starting Saturday." } }
   ];
 
+
+  /* ---------- clever angles: each charge has a few defenses that genuinely work ---------- */
+  // Same order as CASES. w = words that show the excuse is about this charge. a = angles, each with keys and a ruling.
+  var ANGLES = [
+    { w: ["meeting", "monday", "team", "standup", "boss", "call", "zoom", "agenda", "minutes"], a: [
+      { k: ["could have been an email", "couldve been an email", "should have been an email", "it was an email", "read the notes", "read the minutes", "watched the recording", "notes+after", "caught up+after"], s: 78,
+        l: "You read the minutes, which is more than anyone who attended did. The court has sat through that meeting in spirit. Acquitted. Sentence: one useful comment in the chat next Monday." },
+      { k: ["fixing the thing", "fixing a bug", "fixing the bug", "putting out a fire", "customer called", "client called", "the server", "production was down", "site was down"], s: 74,
+        l: "You missed a meeting about the work because you were doing the work. The irony has been entered into evidence. Acquitted. Sentence: tell them before you vanish next time." } ] },
+    { w: ["wedding", "toast", "speech", "best friend", "bride", "groom", "ceremony", "reception"], a: [
+      { k: ["recorded the toast", "sent a video", "video toast", "recorded a video", "facetimed", "on facetime", "zoomed in", "livestream"], s: 66,
+        l: "You delivered the toast by video, and the court hears it got the biggest laugh of the night. Presence is a technicality. Acquitted, narrowly. Sentence: buy the first round at the anniversary." },
+      { k: ["in labor", "had a baby", "gave birth", "my wife went into labor", "my partner went into labor", "went into labor", "hospital"], s: 92,
+        l: "A brand-new person outranks a toast. Even the best man agrees, and he wanted that speech. Acquitted. Sentence: the baby gives the toast at the next wedding." } ] },
+    { w: ["book", "library", "librarian", "overdue", "chapter", "read", "reading", "pages", "late fee", "fine"], a: [
+      { k: ["love the book", "love this book", "love it so much", "loved the book", "loved it so much", "favorite book", "cant give it back", "cant let it go", "couldnt give it back", "couldnt let it go", "rereading", "reread", "read it again", "reading it again"], s: 72,
+        l: "You loved a book too much to let it go. The court has been there, with a book called Rules of Evidence. Acquitted on sympathy. Sentence: return it, then buy your own copy and love that one." },
+      { k: ["not finished", "havent finished", "still reading", "last chapter", "almost done", "so long", "800 pages", "1000 pages", "war and peace", "it is long", "its long"], s: 61,
+        l: "The book is long and you are thorough. The court respects a reader, if not a calendar. Acquitted, barely. Sentence: finish the last chapter by Friday, then bring it back." },
+      { k: ["paid the fine", "pay the fine", "paying the fine", "late fees", "funding the library", "donation", "supporting the library"], s: 68,
+        l: "You have been funding the library one late fee at a time. That is philanthropy with extra steps. Acquitted. Sentence: return it before you buy them a new wing." } ] },
+    { w: ["group chat", "chat", "trip", "reply", "text", "texts", "messages", "phone", "notifications", "muted"], a: [
+      { k: ["fine with whatever", "im easy", "im down for anything", "down for anything", "any date works", "any dates work", "whatever works", "go with the flow"], s: 63,
+        l: "Silence as agreement. Bold, but it is technically the least difficult person in the chat. Acquitted. Sentence: one thumbs-up, so they know you are alive." },
+      { k: ["muted it", "muted the chat", "600 messages", "500 messages", "hundreds of messages", "too many messages", "300 messages", "1000 messages"], s: 70,
+        l: "Six hundred messages about one trip. The court would also have muted it, and the court is paid to listen. Acquitted. Sentence: scroll up, vote, mute again." } ] },
+    { w: ["potluck", "fork", "food", "dish", "bring", "brought", "casserole", "salad", "eat"], a: [
+      { k: ["wash+dish", "clean+up", "washed the dishes", "did the dishes", "cleaned up", "stayed to clean", "washing up", "do the dishes"], s: 76,
+        l: "You brought a fork and left with every dish in the building clean. That is a fair trade and possibly a career. Acquitted. Sentence: bring napkins next time, at minimum." },
+      { k: ["brought the fork for everyone", "forks for everyone", "plates and forks", "utensils", "cutlery", "someone had to bring forks", "nobody else brought forks", "nobody+fork", "no one+fork", "somebody had to+fork"], s: 69,
+        l: "Forty people brought pasta salad and nobody brought anything to eat it with. You are the hero of this potluck. Acquitted. Sentence: forks again, by popular demand." },
+      { k: ["taste tester", "quality control", "official taster", "judge the food", "judging the food"], s: 58,
+        l: "Quality control is a real job. The court is also, technically, a taster of things. Acquitted on professional courtesy. Sentence: a dip, next time. Any dip." } ] },
+    { w: ["birthday", "family", "mom", "dad", "grandma", "grandpa", "aunt", "uncle", "cousin", "card", "gift", "forgot"], a: [
+      { k: ["celebrating all week", "birthday week", "birthday month", "celebrating it later", "belated", "extended celebration", "saving it for the weekend"], s: 64,
+        l: "A birthday month instead of a birthday. Generous, suspicious, and impossible to disprove. Acquitted. Sentence: the card arrives this week, with a stamp." },
+      { k: ["called them", "called her", "called him", "visited", "drove over", "showed up in person", "took them to dinner", "took her to dinner", "took him to dinner"], s: 70,
+        l: "You showed up in person, late, with your face. Faces beat cards in this court. Acquitted. Sentence: put every birthday in your phone, tonight, in front of the bailiff." } ] },
+    { w: ["project", "group", "part", "slides", "deadline", "midnight", "teammates", "presentation", "11:59"], a: [
+      { k: ["did everything else", "did the whole thing", "did all of it", "did the rest", "carried the group", "carried them", "nobody else did", "no one else did", "my part was the whole project", "never told me+part", "didnt tell me+part", "nobody told me+part", "never assigned"], s: 75,
+        l: "Your part was missing because your part was everyone else's part. The court has been in group projects. Acquitted, with feeling. Sentence: put your name on the title slide, twice." },
+      { k: ["the file corrupted", "file got corrupted", "corrupted", "wrong file", "uploaded the wrong file", "google doc", "version history"], s: 57,
+        l: "The upload ate your part, and the version history backs you up. The court checked the timestamps. Acquitted, narrowly. Sentence: save locally, like it is 2009." } ] },
+    { w: ["plant", "houseplant", "water", "watered", "stick", "leaves", "soil", "pot", "sun"], a: [
+      { k: ["its dormant", "it is dormant", "dormant", "hibernating", "its resting", "it is resting", "winter mode", "its a succulent", "it is a succulent", "cactus"], s: 60,
+        l: "Dormant. The court cannot prove the stick is dead, and the stick is not talking. Acquitted, pending spring. Sentence: water it weekly and wait for a miracle." },
+      { k: ["overwatered", "too much water", "watered it too much", "drowned it", "loved it too much", "talked to it"], s: 65,
+        l: "You did not neglect the plant. You smothered it with love and water. That is a different crime, and not on today's docket. Acquitted. Sentence: one glass a week, not one bathtub." } ] },
+    { w: ["mall", "sick", "sick day", "shopping", "store", "seen", "shoes", "food court"], a: [
+      { k: ["pharmacy", "medicine", "cough syrup", "tissues", "prescription", "cvs", "walgreens", "the drugstore"], s: 72,
+        l: "The pharmacy is in the mall, and the receipt says cough drops. The court accepts a sick person buying sick things. Acquitted. Sentence: go home, and do not stop at the pretzel stand." },
+      { k: ["doctors orders", "doctor said walk", "fresh air", "light exercise", "mental health day", "mental health"], s: 62,
+        l: "A mental health day, with walking. The court has taken worse days and fewer steps. Acquitted. Sentence: call it what it is next time and skip the cough." } ] },
+    { w: ["surprise party", "party", "surprise", "guests", "birthday", "cake", "friends", "hiding"], a: [
+      { k: ["didnt know", "did not know", "it was a surprise", "nobody told me", "no one told me", "thats the point", "that is the point", "how would i know"], s: 86,
+        l: "You missed a party that was kept secret from you. The defense is airtight and also the entire point of a surprise. Acquitted. Sentence: act shocked at the next one, convincingly." },
+      { k: ["planning their surprise", "planning a surprise for them", "throwing them a party", "planning a party for them", "double surprise", "planning+surprise", "planning+party"], s: 80,
+        l: "You were out planning a surprise for the people planning yours. Two parties, zero communication. Acquitted for sheer chaos. Sentence: merge the parties." } ] },
+    { w: ["car", "tank", "gas", "fuel", "friend", "borrowed", "empty", "drive", "drove", "station", "fill"], a: [
+      { k: ["owed me", "owes me", "we are even", "were even", "call it even", "evens out", "paid them back", "pay them back", "gas money", "venmo", "venmoed", "sent them money", "left money", "left cash", "cash in the glovebox", "owe+gas", "paid+gas", "money+gas", "money+tank"], s: 74,
+        l: "A counterclaim. The friend owed you, the tank settled it, and the court cannot find a single unbalanced dollar. Acquitted. Sentence: settle the next debt in money, not in gasoline." },
+      { k: ["it was empty when", "was already empty", "got it empty", "gave it to me empty", "same as i got it", "how i got it", "returned it the way"], s: 81,
+        l: "You returned the car exactly as you received it. That is not a crime. That is a mirror. Acquitted. Sentence: photos of the gauge next time, both ways." },
+      { k: ["electric", "its electric", "it is electric", "a tesla", "hybrid", "the battery"], s: 70,
+        l: "The car runs on electricity, and the tank is decorative. The court has no gas to charge you with. Acquitted. Sentence: plug it in before you hand it back." } ] },
+    { w: ["dishes", "soaking", "sink", "pan", "pot", "plates", "wash", "nine days", "sponge"], a: [
+      { k: ["its still soaking", "it is still soaking", "still soaking", "soaking takes time", "deep soak", "the process", "trust the process", "marinating"], s: 56,
+        l: "The pan is not dirty. It is soaking, and soaking has no legal time limit. The court looked. Acquitted on a technicality it hates. Sentence: day ten is scrub day." },
+      { k: ["no hot water", "water heater", "out of soap", "no soap", "ran out of soap", "dish soap"], s: 66,
+        l: "No soap, no hot water, no case. The court will not convict you for lacking supplies. Acquitted. Sentence: buy soap today and use it today." } ] },
+    { w: ["interview", "job", "late", "boss", "hiring", "manager", "resume", "office"], a: [
+      { k: ["helped someone", "stopped to help", "helped an old lady", "helped a stranger", "car accident", "called 911", "called an ambulance", "changed a tire", "flat tire"], s: 82,
+        l: "You stopped to help someone on the way to your own job interview. That is the best answer to their first question. Acquitted. Sentence: mention it, briefly, without the halo." },
+      { k: ["interviewer+late", "the interviewer was late", "they were late", "interviewer was also late", "they started late", "they rescheduled"], s: 77,
+        l: "The interviewer was later than you were. The court rules this a draw, and draws go to the defense. Acquitted. Sentence: still arrive ten minutes early next time." } ] },
+    { w: ["dentist", "appointment", "teeth", "cleaning", "floss", "missed", "cavity"], a: [
+      { k: ["i floss", "flossed", "perfect teeth", "brushed extra", "brushed twice", "my teeth are fine", "no cavities", "brushing"], s: 56,
+        l: "You flossed so hard you made the appointment redundant. The court admires the effort and doubts the gums. Guilty, barely. Sentence: open wide, next Tuesday." },
+      { k: ["they cancelled", "they canceled", "dentist was sick", "office was closed", "they called to cancel", "rescheduled by them", "they moved it"], s: 84,
+        l: "The dentist missed the appointment first. You cannot skip something that was already skipped. Acquitted. Sentence: book the new date before you leave this courtroom." } ] },
+    { w: ["move", "moving", "boxes", "couch", "truck", "friend", "help", "lift", "apartment"], a: [
+      { k: ["sent pizza", "ordered pizza", "paid for the truck", "rented the truck", "paid for movers", "hired movers", "sent food", "bought them lunch"], s: 79,
+        l: "You did not lift the couch. You fed the people who lifted the couch. Armies run on that. Acquitted. Sentence: help unpack the kitchen." },
+      { k: ["bad back", "my back", "threw out my back", "back injury", "pulled a muscle", "sprained"], s: 63,
+        l: "A bad back and a heavy couch are a dangerous combination. The court protects your spine, reluctantly. Acquitted. Sentence: you carry the lamps." } ] },
+    { w: ["leftovers", "roommate", "fridge", "food", "ate", "pad thai", "container", "overnight", "hungry"], a: [
+      { k: ["about to go bad", "would have gone bad", "expired", "going to spoil", "saved it from", "it was day five", "it was old"], s: 58,
+        l: "You ate the leftovers to save them from the bin. A rescue, technically, with chopsticks. Acquitted, uneasily. Sentence: replace them, fresh, with a sorry note." },
+      { k: ["sleepwalk", "sleepwalking", "sleep eating", "ate it in my sleep", "dont remember"], s: 54,
+        l: "Sleep eating. The court cannot convict an unconscious mind, but it can convict the fork in your sink. Guilty, barely. Sentence: lock your own fridge door at night." },
+      { k: ["they ate mine", "they eat my food", "they ate my food", "revenge", "payback", "even now"], s: 66,
+        l: "The roommate ate your food first. This court recognizes the ancient law of leftovers. Acquitted. Sentence: label everything, both of you." } ] },
+    { w: ["exam", "final", "slept", "alarm", "test", "class", "study", "studied", "professor"], a: [
+      { k: ["studied all night", "up all night studying", "pulled an all nighter", "all nighter", "studied too hard", "studying until"], s: 60,
+        l: "You studied so hard you slept through the test. The court finds that tragic, sincere and slightly impressive. Acquitted on sympathy. Sentence: ask for a retake, and sleep the night before." },
+      { k: ["professor said", "it was optional", "already passed", "the final was optional", "had an a", "exempt"], s: 75,
+        l: "The final could not lower your grade, so your body made an executive decision. Acquitted. Sentence: tell the professor anyway. They like being told." } ] },
+    { w: ["bus", "field trip", "trip", "school", "missed", "teacher", "class", "permission slip"], a: [
+      { k: ["drove there", "parents drove me", "got a ride", "met them there", "biked there", "beat the bus"], s: 77,
+        l: "You missed the bus and beat it there anyway. The court calls that arriving with style. Acquitted. Sentence: ride the bus home, with your classmates." },
+      { k: ["forgot the permission slip", "permission slip", "no slip"], s: 55,
+        l: "No permission slip, no bus, no crime. The court blames the paperwork. Acquitted, narrowly. Sentence: sign the next one tonight." } ] },
+    { w: ["movie night", "movie", "canceled", "cancelled", "film", "popcorn", "fourth"], a: [
+      { k: ["already seen it", "seen it already", "spoilers", "it got bad reviews", "bad reviews", "the movie is bad", "its a bad movie"], s: 57,
+        l: "You canceled to protect everyone from a bad movie. A public service, poorly communicated. Acquitted, narrowly. Sentence: you pick the next movie, and you show up." },
+      { k: ["host it", "hosting next", "my place next", "ill host", "i will host", "rescheduled", "made it up", "bought the tickets"], s: 66,
+        l: "You canceled and then offered to host. The court accepts an apology with a couch attached. Acquitted. Sentence: snacks are on you. All of them." } ] },
+    { w: ["cake", "party", "bakery", "pick up", "pickup", "dessert", "candles", "forgot"], a: [
+      { k: ["baked one", "baked a cake", "made one", "made a cake", "homemade", "made it myself", "baked it myself"], s: 80,
+        l: "You forgot the cake, so you made a cake. That is not forgetting. That is upgrading. Acquitted. Sentence: the recipe, shared with the court." },
+      { k: ["ice cream", "brought cookies", "brought pie", "got a pie", "cupcakes", "donuts"], s: 61,
+        l: "No cake, but there was pie. The court is flexible about dessert, if nothing else. Acquitted, narrowly. Sentence: candles in the pie. Make it count." } ] },
+    { w: ["taxes", "tax", "irs", "deadline", "forms", "file", "filing", "refund", "accountant"], a: [
+      { k: ["filed an extension", "extension", "got an extension", "requested an extension"], s: 88,
+        l: "You filed for an extension. That is not missing the deadline. That is moving it, legally. Acquitted. Sentence: file before the new deadline, which is real." },
+      { k: ["they owe me", "getting a refund", "refund", "they owe me money", "im owed"], s: 64,
+        l: "The government owes you money and you are in no hurry to collect. The court finds that generous, if odd. Acquitted. Sentence: claim your refund and buy something nice." } ] },
+    { w: ["bakery", "shift", "4 am", "4am", "work", "dough", "croissants", "bread", "early", "alarm"], a: [
+      { k: ["covered my shift", "found someone to cover", "swapped shifts", "swapped my shift", "got someone to cover", "traded shifts"], s: 82,
+        l: "Your shift was covered and the bread still rose. No croissant was harmed. Acquitted. Sentence: cover theirs, when they ask." },
+      { k: ["4 am+real time", "4am+real time", "4 am is not a time", "4am isnt a time", "the sun wasnt up", "it was still night", "its basically night", "it is basically night"], s: 45,
+        l: "You argue that 4 AM is not a real time. The court agrees in its heart and must still rule with its gavel. Guilty, sympathetically. Sentence: two alarms, one across the room." } ] },
+    { w: ["gift", "money", "collected", "group", "present", "bought", "cash", "venmo"], a: [
+      { k: ["refunded everyone", "gave the money back", "returned the money", "paid everyone back", "refunded it"], s: 72,
+        l: "No gift, but every dollar went back where it came from. The court sees no theft, just a failed shopping trip. Acquitted. Sentence: someone else collects next time." },
+      { k: ["its handmade", "it is handmade", "making it myself", "still making it", "handmade", "custom order", "its being made", "on backorder", "backordered"], s: 63,
+        l: "The gift is handmade and taking its time. The court will believe it when it sees it, which it will, by Friday. Acquitted, provisionally. Sentence: a photo of progress to the group." } ] },
+    { w: ["wedding", "vows", "late", "ceremony", "church", "bride", "groom", "reception"], a: [
+      { k: ["caught the bouquet", "made the reception", "best part is the reception", "danced all night", "here for the cake", "came for the party"], s: 58,
+        l: "You missed the vows but you saved the dance floor. The court has been to weddings. It knows which half matters. Acquitted, narrowly. Sentence: a heartfelt card about the vows you missed." },
+      { k: ["picked up grandma", "drove grandma", "brought grandma", "drove my grandmother", "picked up my grandmother", "grandma was slow"], s: 76,
+        l: "You were late because you brought Grandma, and Grandma does not rush. The court sides with Grandma. Acquitted. Sentence: save her a seat at the front next time." } ] },
+    { w: ["snacks", "practice", "team", "turn", "orange slices", "coach", "game", "season"], a: [
+      { k: ["double snacks", "bring double", "bring extra", "extra snacks", "twice the snacks", "make it up", "make up for it", "two weeks of snacks", "next two weeks", "next week and the week after"], s: 70,
+        l: "You missed your turn and offered double snacks in restitution. The court accepts payment in orange slices. Acquitted. Sentence: double snacks, as promised, or this case reopens." },
+      { k: ["we won", "we still won", "they played better", "played better hungry", "hungry players"], s: 55,
+        l: "The team played better hungry and won. The court cannot argue with a scoreboard. Acquitted, narrowly. Sentence: snacks next week, to celebrate." },
+      { k: ["healthy", "orange slices are bad", "sugar", "bring water", "brought water"], s: 50,
+        l: "You claim you skipped snacks for the team's health. The court sees through you, and also through the empty cooler. Guilty, barely. Sentence: orange slices, two weeks running." } ] }
+  ];
+
+  /* ---------- judged on the spot: excuses the court has never heard get a fair hearing ---------- */
+  var SPOT = {
+    charm: [
+      function (c) { return "The court is not made of stone. Mostly oak. “" + c + "” got to the oak. Acquitted on sympathy. Sentence: say it to the person you wronged, exactly like that."; },
+      function (c) { return "“" + c + "” is the most sincere thing said in this room all week, and the bailiff is moved. So is the court, slightly. Acquitted. Sentence: one honest apology, delivered in person."; },
+      function (c) { return "The court came in ready to convict and “" + c + "” disarmed it. That should not work. It worked. Acquitted. Sentence: do not try this twice."; },
+      function (c) { return "Charm is not evidence, but “" + c + "” has a lot of it, and the jury of one is smiling. Acquitted, against my better judgment. Sentence: bring snacks to the next hearing."; }
+    ],
+    smart: [
+      function (c) { return "“" + c + "”. The court looked for the hole in that and could not find one. Acquitted on a technicality. Sentence: the court will be studying your argument, resentfully."; },
+      function (c) { return "Counsel argues “" + c + "”, and counsel has a point. The court hates it when counsel has a point. Acquitted. Sentence: use this power only for good."; },
+      function (c) { return "“" + c + "” is a real defense with a real reason in it. This court sees that roughly twice a year. Acquitted. Sentence: frame it."; },
+      function (c) { return "The court checked “" + c + "” against the charge, and it holds. Barely, but it holds. Acquitted. Sentence: next time, avoid the charge entirely."; }
+    ],
+    close: [
+      function (c) { return "“" + c + "” nearly worked. The court leaned forward. Then the court remembered the charge. Guilty, narrowly. Sentence: one more detail and you walk."; },
+      function (c) { return "There is a good defense hiding inside “" + c + "”. It did not come out in time. Guilty, with respect. Sentence: try again tomorrow, braver."; },
+      function (c) { return "“" + c + "” has a reason in it, which puts you ahead of most of this docket. Not ahead enough. Guilty. Sentence: sharper, next time."; },
+      function (c) { return "The court liked “" + c + "” more than it should. Liking is not acquitting. Guilty, warmly. Sentence: come back with proof."; }
+    ],
+    soft: [
+      function (c) { return "“" + c + "” came from the heart, and the heart is not a witness. The court is touched and unmoved. Guilty, gently. Sentence: tell them, not me."; },
+      function (c) { return "The court believes you mean “" + c + "”. It just does not explain anything. Guilty, kindly. Sentence: a reason, next time, with the feelings."; }
+    ],
+    mercy: [
+      function (c) { return "The court almost never accepts an apology. \u201C" + c + "\u201D sounded like you meant it. Acquitted on mercy. Sentence: keep that promise, because the court remembers faces."; },
+      function (c) { return "\u201C" + c + "\u201D. An apology and a promise, in that order, with no excuses. The court is stunned into leniency. Acquitted. Sentence: prove it by next week."; },
+      function (c) { return "Most defendants argue. You apologized. The court did not know what to do, so it is doing this: acquitted on mercy. Sentence: say it to them exactly the same way."; },
+      function (c) { return "The court has heard a thousand excuses and maybe nine apologies. \u201C" + c + "\u201D makes ten. Acquitted. Sentence: do not make the court regret this."; }
+    ],
+    sorry: [
+      function (c) { return "\u201C" + c + "\u201D. The apology is noted, and the court is touched. A promise to do better would have walked you out the door. Guilty, with a reduced sentence: say sorry to them too."; },
+      function (c) { return "The court accepts your apology and still has to rule on the charge. \u201C" + c + "\u201D is half a defense. Guilty, gently. Sentence: the other half is a promise."; }
+    ],
+    lazy: [
+      function (c) { return "\u201C" + c + "\u201D. That is the whole defense? The court has seen longer grocery lists. Guilty. Sentence: a reason, a detail, and at least one more sentence."; },
+      function (c) { return "The court waited for the rest of \u201C" + c + "\u201D. There is no rest. Guilty. Sentence: come back with something the court has not heard four hundred times."; },
+      function (c) { return "\u201C" + c + "\u201D is not an excuse. It is a shrug with punctuation. Guilty. Sentence: try harder. The court believes in you, slightly."; },
+      function (c) { return "Three words and a hopeful look. \u201C" + c + "\u201D does not survive the walk to the bench. Guilty. Sentence: tell the court a story next time."; }
+    ],
+    gibber: [
+      function (c) { return "“" + c + "” was entered into the record and the stenographer quit. Guilty. Sentence: words, in an order."; },
+      function (c) { return "The court asked for an excuse and received “" + c + "”. The court is still waiting. Guilty. Sentence: a full sentence, with a noun in it."; }
+    ]
+  };
+  var freeLines = [];
+  function usedLines() {
+    if (mode === "docket") { if (!dk.lines) dk.lines = []; return dk.lines; }
+    return freeLines;
+  }
+  // pick a line nobody has seen on this docket (or this free-play visit)
+  function pickLine(name, list, clip, h) {
+    var used = usedLines();
+    for (var i = 0; i < list.length; i++) {
+      var j = (h + i) % list.length, id = name + j;
+      if (used.indexOf(id) < 0) { used.push(id); return list[j](clip); }
+    }
+    return list[h % list.length](clip);
+  }
+  var STOP = " the a an and or but you your yours my me i to of in on at for with was were is are it its this that from into as by be been have has had not no so too very just again ";
+  function roots(s) {
+    return (norm(s).match(/[a-z0-9]+/g) || []).filter(function (w) { return w.length >= 4 && STOP.indexOf(" " + w + " ") < 0; }).map(function (w) { return w.slice(0, 4); });
+  }
+  function onTheSpot(trimmed, text, h, c, a) {
+    var clip = clipOf(trimmed);
+    var words = text.match(/[a-z0-9]+/g) || [];
+    var letters = text.replace(/[^a-z]/g, "");
+    var vowels = letters.replace(/[^aeiouy]/g, "").length;
+    var res = { charge: "“" + clip + "”", excuse: trimmed, h: h, spot: true };
+    if (words.length < 2 || vowels / Math.max(1, letters.length) < 0.2 || /(.)\1{3,}/.test(letters)) {
+      res.ruling = "GUILTY"; res.score = 2 + (h % 6); res.line = pickLine("g", SPOT.gibber, clip, h); return res;
+    }
+    var apology = /\b(sorry|apologi[sz]e|my bad|forgive me|i was wrong)\b/.test(text);
+    var promise = /\b(wont happen again|will not happen again|never again|i promise|make it up|make up for|next time|from now on|ill (bring|buy|do|fix|help|pay|take|file|be|reschedule|reply|throw|present|water|fill|host)|i will (bring|buy|do|fix|help|pay|take|file|be|reschedule|reply|throw|present|water|fill|host)|double|twice|two weeks)\b/.test(text);
+    var rel = 0;
+    if (c) {
+      var mine = roots(trimmed);
+      var theirs = roots(c.t).concat((a && a.w ? a.w : []).map(function (w) { return norm(w).slice(0, 4); }));
+      var seen = {};
+      mine.forEach(function (r) { if (!seen[r] && theirs.indexOf(r) >= 0) { seen[r] = 1; rel++; } });
+    } else rel = 1;
+    var reason = /\b(because|since|so that|so i|had to|owed|owes|but|otherwise|technically|actually|in fairness|to be fair|which means|that way|instead|in exchange|anyway)\b/.test(text);
+    var heart = /\b(love|loved|lovely|miss|missed them|sorry|apologi[sz]e|promise|heart|honestly|grandma|grandpa|nana|my mom|my dad|my kids?|baby|cried|crying|tears|forgive|best friend|i swear|adore|cherish|so much)\b/.test(text);
+    var clever = /\b(technically|legally|in my defen[cs]e|loophole|precedent|counter|even|owed|owes|fair|refund|receipt|proof|evidence)\b/.test(text);
+    var specific = /\d/.test(text) || words.length >= 10;
+    if (!apology && !promise && !heart && (words.length < 4 || letters.length < 14)) {
+      res.ruling = "GUILTY"; res.score = 5 + (h % 10); res.line = pickLine("l", SPOT.lazy, clip, h); return res;
+    }
+    var score = 14 + (promise ? 14 : 0) + Math.min(2, rel) * 11 + (reason ? 12 : 0) + (heart ? 18 : 0) + (clever ? 10 : 0) + (specific ? 7 : 0) + (words.length >= 18 ? 4 : 0) + (trimmed.indexOf("!") >= 0 ? 3 : 0) + (h % 7);
+    if (c && rel === 0 && !heart && !apology && !promise) score -= 12; // off topic: the court notices
+    if (apology && promise) score = Math.max(score, 57 + (h % 9));
+    else if (apology) score = Math.max(score, 42 + (h % 9));
+    score = Math.max(6, Math.min(88, score));
+    res.score = score;
+    if (apology) res.cat = "mercy"; // the court shows mercy once per docket
+    if (score >= 55 && apology) { res.ruling = "ACQUITTED"; res.line = pickLine("m", SPOT.mercy, clip, h); }
+    else if (score < 55 && apology) { res.ruling = "GUILTY"; res.line = pickLine("o", SPOT.sorry, clip, h); }
+    else if (score >= 55) { res.ruling = "ACQUITTED"; res.line = heart ? pickLine("c", SPOT.charm, clip, h) : pickLine("s", SPOT.smart, clip, h); }
+    else if (score >= 40) { res.ruling = "GUILTY"; res.line = pickLine("n", SPOT.close, clip, h); }
+    else if (heart) { res.ruling = "GUILTY"; res.line = pickLine("h", SPOT.soft, clip, h); }
+    else { res.ruling = "GUILTY"; res.line = pickLine("d", DEFAULTS, clip, h); }
+    return res;
+  }
+  function angleFor(text, a) {
+    if (!a) return null;
+    var best = null, bestLen = 0;
+    a.a.forEach(function (x) { x.k.forEach(function (k) {
+      var ok = k.indexOf("+") >= 0 ? k.split("+").every(function (part) { return text.indexOf(part) >= 0; }) : hit(text, k);
+      if (ok && k.length > bestLen) { best = x; bestLen = k.length; }
+    }); });
+    return best;
+  }
+
   function hash(s) {
     var h = 2166136261;
     for (var i = 0; i < s.length; i++) {
@@ -853,14 +1111,8 @@
     }
     var clip = clipOf(trimmed);
     if (!best) {
-      return {
-        ruling: "GUILTY",
-        score: 8 + (h % 18),
-        charge: "\u201C" + clip + "\u201D",
-        line: DEFAULTS[h % DEFAULTS.length](clip),
-        excuse: trimmed,
-        h: h
-      };
+      // the court has never heard this one: it gets a fair hearing once the charge is known (docketRule)
+      return { needsSpot: true, ruling: "GUILTY", score: 0, charge: "\u201C" + clip + "\u201D", line: "", excuse: trimmed, text: text, h: h };
     }
     return {
       ruling: best.ruling,
@@ -1079,6 +1331,7 @@
       "Case " + result.caseNo,
       "Hon. June Burden presiding",
       "",
+      result.chargeText ? "Charge: " + result.chargeText : "",
       "Excuse: “" + shown + "”",
       "",
       "VERDICT: " + result.ruling,
@@ -1121,7 +1374,9 @@
     result.caseNo = caseNumber(result.h || hash(result.line));
     $("caseNo").textContent = "Case No. " + result.caseNo;
     $("caseDate").textContent = today();
-    $("matter").textContent = result.caseNum ? "Case " + result.caseNum + " of 5 \u00B7 In the matter of the excuse" : "In the matter of the excuse";
+    $("matter").textContent = result.caseNum ? "Case " + result.caseNum + " of 5 \u00B7 The charge" : "In the matter of the excuse";
+    $("chargeOf").textContent = result.chargeText || "";
+    $("chargeOf").hidden = !result.chargeText;
     $("charge").textContent = result.charge;
     $("line").textContent = result.line;
     var stamp = $("stamp");
@@ -1274,10 +1529,23 @@
       $("dkText").textContent = CASES[dk.cases[n]].t;
     }
   }
+  function spotIfNeeded(result, c, a) {
+    return result.needsSpot ? onTheSpot(result.excuse, result.text, result.h, c, a) : result;
+  }
   function docketRule(result) {
-    if (mode !== "docket" || dk.res.length >= 5) return result;
+    if (mode !== "docket" || dk.res.length >= 5) { result = spotIfNeeded(result, null, null); result.score = result.ruling === "ACQUITTED" ? Math.max(55, result.score) : Math.min(54, result.score); return result; }
     var c = CASES[dk.cases[dk.res.length]];
-    result.caseNum = dk.res.length + 1;
+    var ang = ANGLES[dk.cases[dk.res.length]];
+    var caseNum = dk.res.length + 1;
+    var sayIt = norm(result.excuse || "");
+    var angle = angleFor(sayIt, ang);
+    if (angle) {
+      result = { ruling: angle.s >= 55 ? "ACQUITTED" : "GUILTY", score: believability(angle.s, result.h || hash(sayIt)), charge: result.charge, line: angle.l, excuse: result.excuse, cat: "@" + angle.k[0], h: result.h };
+    } else if (result.needsSpot) {
+      result = spotIfNeeded(result, c, ang);
+    }
+    result.caseNum = caseNum;
+    result.chargeText = c.t;
     var said = norm(result.excuse || "");
     var used = -1;
     for (var i = 0; i < dk.res.length; i++) {
@@ -1285,15 +1553,21 @@
       if ((result.cat && p.cat === result.cat) || (said && p.x === said)) { used = i; break; }
     }
     var h = result.h || hash(said);
-    if (used >= 0) {
+    if (used >= 0 && result.cat === "mercy") {
+      result.ruling = "GUILTY";
+      result.score = 18 + (h % 10);
+      result.line = "The court already showed you mercy on case " + (used + 1) + " of this docket. Mercy is not a subscription. Guilty. Sentence: an actual excuse, or an actual apology to them.";
+    } else if (used >= 0) {
       result.ruling = "GUILTY";
       result.score = 4 + (h % 6);
       result.line = "This court heard that excuse on case " + (used + 1) + " of this very docket. It did not improve with reheating. Guilty. Sentence: a fresh excuse for every charge.";
-    } else if (result.cat && c.no && c.no[result.cat]) {
+    } else if (!angle && result.cat && c.no && c.no[result.cat]) {
       result.ruling = "GUILTY";
       result.score = 9 + (h % 10);
       result.line = c.no[result.cat];
     }
+    if (result.ruling === "ACQUITTED") result.score = Math.max(55, result.score);
+    else result.score = Math.min(54, result.score);
     return result;
   }
   var CLOSING = [
