@@ -1013,11 +1013,16 @@
     var heart = /\b(love|loved|lovely|miss|missed them|sorry|apologi[sz]e|promise|heart|honestly|grandma|grandpa|nana|my mom|my dad|my kids?|baby|cried|crying|tears|forgive|best friend|i swear|adore|cherish|so much)\b/.test(text);
     var clever = /\b(technically|legally|in my defen[cs]e|loophole|precedent|counter|even|owed|owes|fair|refund|receipt|proof|evidence)\b/.test(text);
     var specific = /\d/.test(text) || words.length >= 10;
-    if (!apology && !promise && !heart && (words.length < 4 || letters.length < 14)) {
+    var croots = c ? roots(c.t) : [];
+    var odd = absurdHits(text, function (w) { return croots.indexOf(w.slice(0, 4)) >= 0; }).concat(ACTS.filter(function (w) { return hit(text, w); }));
+    if (odd.length && words.length < 3) odd = [];
+    if (!odd.length && !apology && !promise && !heart && (words.length < 4 || letters.length < 14)) {
       res.ruling = "GUILTY"; res.score = 5 + (h % 10); res.line = pickLine("l", SPOT.lazy, clip, h); return res;
     }
     var score = 14 + (promise ? 14 : 0) + Math.min(2, rel) * 11 + (reason ? 12 : 0) + (heart ? 18 : 0) + (clever ? 10 : 0) + (specific ? 7 : 0) + (words.length >= 18 ? 4 : 0) + (trimmed.indexOf("!") >= 0 ? 3 : 0) + (h % 7);
-    if (c && rel === 0 && !heart && !apology && !promise) score -= 12; // off topic: the court notices
+    if (odd.length) score += 30 + (odd.length > 1 ? 6 : 0); // absurd and committed: the most fun outcome
+    if (odd.length && words.length <= 4) score = Math.min(score, 50); // ...once there is a story
+    if (c && rel === 0 && !heart && !apology && !promise && !odd.length) score -= 12; // off topic: the court notices
     if (apology && promise) score = Math.max(score, 57 + (h % 9));
     else if (apology) score = Math.max(score, 42 + (h % 9));
     score = Math.max(6, Math.min(88, score));
@@ -1025,6 +1030,8 @@
     if (apology) res.cat = "mercy"; // the court shows mercy once per docket
     if (score >= 55 && apology) { res.ruling = "ACQUITTED"; res.line = pickLine("m", SPOT.mercy, clip, h); }
     else if (score < 55 && apology) { res.ruling = "GUILTY"; res.line = pickLine("o", SPOT.sorry, clip, h); }
+    else if (score >= 55 && odd.length) { res.ruling = "ACQUITTED"; res.line = pickLine("x", SPOT.absurd, clip, h); }
+    else if (odd.length) { res.ruling = "GUILTY"; res.line = pickLine("w", SPOT.weird, clip, h); }
     else if (score >= 55) { res.ruling = "ACQUITTED"; res.line = heart ? pickLine("c", SPOT.charm, clip, h) : pickLine("s", SPOT.smart, clip, h); }
     else if (score >= 40) { res.ruling = "GUILTY"; res.line = pickLine("n", SPOT.close, clip, h); }
     else if (heart) { res.ruling = "GUILTY"; res.line = pickLine("h", SPOT.soft, clip, h); }
@@ -1039,6 +1046,137 @@
       if (ok && k.length > bestLen) { best = x; bestLen = k.length; }
     }); });
     return best;
+  }
+
+  /* ---------- twists: a classic excuse with something absurd in it gets played along with, not punished ---------- */
+  var ABSURD = ["goose", "geese", "pigeon", "pigeons", "seagull", "seagulls", "swan", "llama", "llamas", "alpaca", "emu", "ostrich", "penguin", "penguins", "octopus", "octopuses", "octopi", "raccoon", "raccoons", "moose", "possum", "opossum", "skunk", "coyote", "a bear", "the bear", "grizzly", "monster", "monsters", "shark", "sharks", "bees", "a bee", "hornet", "hornets", "wasps", "horse", "pony", "goat", "goats", "ferret", "hamster", "parrot", "iguana", "snake", "python", "alligator", "crocodile", "gorilla", "monkey", "monkeys", "chimp", "sloth", "squirrel", "squirrels", "bats", "kangaroo", "platypus", "walrus", "elephant", "giraffe", "hippo", "lion", "tiger", "wolf", "wolves", "dinosaur", "t rex", "velociraptor",
+    "wizard", "witch", "ghost", "ghosts", "demon", "demons", "vampire", "vampires", "werewolf", "zombie", "zombies", "dragon", "dragons", "unicorn", "fairy", "goblin", "goblins", "troll", "trolls", "curse", "a spell", "sorcerer", "mermaid", "bigfoot", "sasquatch", "yeti", "cryptid", "leprechaun", "elves", "santa", "tooth fairy", "easter bunny", "time machine", "time travel", "time traveler", "time traveller", "clone", "my clone", "doppelganger", "parallel universe", "alternate universe", "multiverse", "a portal", "simulation", "the matrix", "robot", "robots", "cyborg", "mime", "mimes", "clown", "clowns", "pirate", "pirates", "ninja", "ninjas", "a cult", "illuminati", "the cia", "the fbi", "secret service", "a spy", "interpol", "the mafia", "the mob",
+    "volcano", "meteor", "asteroid", "tsunami", "apocalypse", "black hole", "the moon", "mars", "jupiter", "gravity", "eclipse", "exorcist", "the gavel", "the bailiff"];
+  var ACTS = ["kidnapped", "hostage", "ransom", "eloped", "exorcism", "hypnotized", "swallowed", "possessed", "cursed", "haunted", "sentient", "time traveled", "time travelled"];
+  var PEOPLE = ["mom", "mother", "mum", "dad", "father", "husband", "wife", "boss", "landlord", "priest", "pope", "the president", "mayor", "principal", "teacher", "neighbor", "neighbour", "mailman", "therapist", "lawyer", "grandpa", "uncle", "aunt", "car", "house", "couch", "fridge", "passport", "wedding ring", "diploma", "the deed", "tax return", "taxes", "rent money", "birth certificate", "kid", "baby", "cat", "dog", "teacher", "car keys"];
+  var SLOT = /\b(ate|eaten|eats|swallowed|stole|stolen|steals|abducted|kidnapped|sat on|buried|mailed|sold|married|sued|arrested|chased|attacked|hijacked|replaced|possessed|cursed|hypnotized)\s+(?:my|the|our|his|her|a|an|your|their)\s+([a-z]+(?:\s+[a-z]+)?)/;
+  var USUAL = /^(homework|assignment|essay|paper|project|report|notes|worksheet|math|identity|it|them|him|her)$/;
+  var SLOTTY = ["dog ate my homework", "my cat", "alien", "a bear", "my kid", "my brother"];
+  var NOART = /^(bigfoot|sasquatch|santa|gravity|mars|jupiter|interpol|time travel|illuminati)$/;
+  var TW = {
+    "dog ate my homework": "A dog eating homework is a classic. A dog eating {x} is a nature documentary, and the court has questions, mostly for the dog.",
+    "traffic": "Traffic, the court accepts as weather. Traffic caused by {x} is a news story, and the court would like to see the footage.",
+    "snooze": "An alarm failing is ordinary. An alarm defeated by {x} is a heist, and the court respects a heist.",
+    "wi-fi": "The internet goes down all the time. The internet taken down by {x} is a cyberattack the court did not expect from you.",
+    "the flu": "Being sick is one thing. Being sick because of {x} is a medical first, and the court is fascinated.",
+    "flat tire": "Cars break down every day. A car broken down by {x} is an insurance claim the court would pay to read.",
+    "double-booked": "Double-booked, fine. Double-booked with {x} means your calendar has a more interesting life than this court.",
+    "email": "Emails go missing. An email intercepted by {x} is a spy novel, and the court reads spy novels.",
+    "grandma": "Grandma has been excused in this room many times. Grandma and {x}, together, is a new chapter, and the court wants the sequel.",
+    "alien": "An abduction alone is routine for this court. An abduction involving {x} is a crossover event.",
+    "my kid": "Kids ruin afternoons. A kid with {x} ruins entire zip codes, and the court sympathizes.",
+    "snowed in": "Weather is weather. Weather with {x} in it is a disaster movie, and you were apparently the lead.",
+    "phone died": "Phones die. A phone killed by {x} deserves a small funeral, and the court will attend.",
+    "the doctor": "Doctor visits are dull. A doctor visit involving {x} is a medical drama, and the court is invested.",
+    "dentist": "Dentists are terrifying enough. A dentist plus {x} is a horror film the court refuses to watch alone.",
+    "wedding": "Weddings are chaos. A wedding with {x} on the guest list is a legend, and the court regrets not being invited.",
+    "my flight": "Flights get delayed. A flight delayed by {x} is a story you will tell at every party for the rest of your life.",
+    "food poisoning": "Bad shrimp happens. Food poisoning involving {x} is a menu the court would like to report to someone.",
+    "migraine": "A headache is a headache. A headache caused by {x} is a diagnosis no doctor has ever written down.",
+    "power outage": "Blackouts happen. A blackout caused by {x} is a utility report the court wants framed.",
+    "the train": "Transit is late. Transit delayed by {x} is a commute the whole city will talk about tomorrow.",
+    "printer": "Printers jam. A printer jammed by {x} is a printer with enemies, and the court believes it.",
+    "on zoom": "Video calls go wrong. A video call interrupted by {x} is the only meeting this court would have attended.",
+    "password": "Passwords get forgotten. A password changed by {x} is identity theft with flair.",
+    "my cat": "Cats knock things over. A cat teaming up with {x} is an organized crime ring, and the cat is the brains.",
+    "laundry": "Laundry is a chore. Laundry involving {x} is a crime scene, and the court will not ask what was in the pockets.",
+    "moving day": "Moving is hard. Moving with {x} is a reality show, and the court has questions about the lease.",
+    "jury duty": "Jury duty is real. Jury duty with {x} on the panel is a mistrial waiting to happen.",
+    "covid": "Illness is serious. Illness spread by {x} is a research paper, and the court suggests you write it.",
+    "spilled coffee": "Coffee spills. Coffee spilled by {x} is sabotage, and the court has seen sabotage before.",
+    "the gym": "The gym is the gym. The gym with {x} in it is a sport the court did not know existed.",
+    "broke up": "Breakups hurt. A breakup involving {x} is a love triangle the court did not see coming.",
+    "plumber": "Pipes burst. Pipes burst by {x} is a plumbing emergency with a villain.",
+    "my computer": "Computers crash. A computer crashed by {x} is a hacker movie, and you are apparently in it.",
+    "my brother": "Blaming a sibling is ancient. Blaming a sibling and {x} together is a conspiracy, and the court loves a conspiracy.",
+    "nightmare": "A bad dream is nothing. A bad dream starring {x} is a sign, and the court is not qualified to read signs.",
+    "time zone": "Time zones are confusing. Time zones bent by {x} are physics, and the court failed physics.",
+    "a bear": "Wildlife happens. Wildlife plus {x} is an ecosystem in crisis, and you were standing in the middle of it.",
+    "mugged": "Being robbed is awful. Being robbed by {x} is awful and also, the court must admit, incredible.",
+    "procrastinating": "Procrastination is common. Procrastination caused by {x} is a reason, the court supposes, of a kind.",
+    "running late": "Being late is ordinary. Being late because of {x} is extraordinary, and the court is listening now."
+  };
+  var TW_YES = [
+    "Acquitted on sheer audacity. Sentence: tell this one at parties, never at work.",
+    "Acquitted, because the court refuses to rule against a story this committed. Sentence: write it down before you forget it.",
+    "Acquitted. The court cannot prove it did not happen, and does not want to. Sentence: bring photos next time. The court is begging you.",
+    "Acquitted on creativity, a ground this court invented just now. Sentence: do not try this on your actual boss.",
+    "Acquitted. The bailiff laughed, and the bailiff has not laughed since 2009. Sentence: one more like this and you are hired.",
+    "Acquitted. The stenographer asked for a copy. Sentence: never change.",
+    "Acquitted, against the court's better judgment, which has the afternoon off. Sentence: tell nobody how you did it.",
+    "Acquitted. The court is choosing to believe you, mostly out of curiosity. Sentence: keep the court posted."
+  ];
+  var TW_NO = [
+    "Guilty, but the court enjoyed every word. Sentence: commit harder next time.",
+    "Guilty, narrowly. Make it weirder or make it true. Sentence: one more wild detail.",
+    "Guilty, with a smile the court is trying to hide. Sentence: escalate."
+  ];
+  SPOT.absurd = [
+    function (c) { return "“" + c + "”. The court has no precedent for this and is not sure it wants one. Acquitted on sheer audacity. Sentence: never explain this to a doctor."; },
+    function (c) { return "The court read “" + c + "” twice, then a third time out loud for the gallery. Acquitted, because nobody makes that up, except you, just now. Sentence: frame it."; },
+    function (c) { return "“" + c + "” is the most committed defense this bench has heard all week. Acquitted on commitment alone. Sentence: stay away from whatever that was."; },
+    function (c) { return "The court cannot verify “" + c + "” and has decided it is too entertaining to try. Acquitted. Sentence: if it happens again, film it."; },
+    function (c) { return "Order. “" + c + "” has the gallery on its feet. The court is legally required to reward this. Acquitted. Sentence: a sequel by Friday."; }
+  ];
+  SPOT.weird = [
+    function (c) { return "“" + c + "” is a strong start with no follow-through. Give the court one more insane detail. Guilty, but intrigued. Sentence: escalate."; },
+    function (c) { return "The court perked up at “" + c + "” and then it just ended. Guilty, regretfully. Sentence: finish the story. The court needs to know."; }
+  ];
+  function swapYou(s) { return s.replace(/\b(my|our)\b/g, "your").replace(/\bme\b/g, "you"); }
+  function absurdHits(text, skip) {
+    var out = [];
+    ABSURD.forEach(function (w) { if (hit(text, w) && !(skip && skip(w))) out.push(w); });
+    return out;
+  }
+  // the phrase the twist is about, as the court will say it ("your mom", "a goose")
+  function twistPhrase(text, w) {
+    if (/^(the|my|a) /.test(w)) return swapYou(w);
+    var m = new RegExp("\\b(?:(my|our|the|a|an|his|her|their|some|two|three|\\d+)\\s+(?:[a-z]+\\s+)?)" + escapeReg(w) + "\\b").exec(text);
+    if (m) return swapYou(m[0]);
+    if (w === "illuminati") return "the illuminati";
+    if (NOART.test(w) || (/s$/.test(w) && !/(us|ss)$/.test(w)) || w === "elves" || w === "geese" || w === "wolves" || w === "octopi") return w;
+    return (/^[aeiou]/.test(w) ? "an " : "a ") + w;
+  }
+  function twistOf(text, best, trimmed, h) {
+    var inKeys = function (w) { return best.keys.some(function (k) { return k.indexOf(w) >= 0 || w.indexOf(k) >= 0; }); };
+    var odd = absurdHits(text, inKeys);
+    var acts = best.keys[0] === "alien" ? [] : ACTS.filter(function (w) { return hit(text, w) && !inKeys(w); });
+    var obj = null, mundane = false;
+    if (!odd.length && SLOTTY.indexOf(best.keys[0]) >= 0) {
+      var re = new RegExp(SLOT.source, "g"), m;
+      while ((m = re.exec(text))) {
+        var two = m[2], one = two.split(" ")[0];
+        var thing = PEOPLE.indexOf(two) >= 0 ? two : one;
+        if (USUAL.test(thing) || inKeys(thing)) continue;
+        var det = /^(my|our|the|a|an|his|her|their|your)\b/.exec(text.slice(m.index + m[1].length + 1));
+        obj = swapYou((det ? det[1] + " " : "") + thing);
+        mundane = PEOPLE.indexOf(thing) < 0;
+        break;
+      }
+      var more = !obj && SLOT.test(text) && /\b(?:and then|and also|then|and)\s+(my|our|the|his|her)\s+([a-z]+)/.exec(text);
+      if (more && PEOPLE.indexOf(more[2]) >= 0) obj = swapYou(more[1] + " " + more[2]);
+    }
+    if (!odd.length && !obj && !acts.length) return null;
+    var x = odd.length ? twistPhrase(text, odd[0]) : (obj || "");
+    x = x.replace(/\b(cia|fbi|tsa|t rex)\b/g, function (m) { return m === "t rex" ? "a T. rex" : m.toUpperCase(); });
+    var words = text.match(/[a-z0-9]+/g) || [];
+    var reason = /\b(because|since|so|then|and then|after|which|while|when)\b/.test(text);
+    var score = mundane ? 40 : 60;
+    score += Math.min(2, odd.length + acts.length + (obj && !mundane ? 1 : 0) - 1) * 5 + (words.length >= 8 ? 8 : 0) + (reason ? 5 : 0) + (h % 9);
+    score = Math.max(30, Math.min(93, score));
+    var yes = score >= 55;
+    var setup = mundane ? "The court knows this excuse by heart. It has never heard it with " + x + " in it. That is at least new." : x ? (TW[best.keys[0]] || "The court knows this excuse by heart. It has never heard it with {x} in it.").replace("{x}", x) : "The court knows this excuse by heart. It has never heard it told like this, and the court is leaning forward.";
+    var close = yes ? TW_YES : TW_NO;
+    var used = usedLines(), tag = yes ? "ty" : "tn", pick = -1;
+    for (var i = 0; i < close.length; i++) { var j = (h + i) % close.length; if (used.indexOf(tag + j) < 0) { pick = j; break; } }
+    if (pick < 0) { for (var k = used.length - 1; k >= 0; k--) if (used[k].indexOf(tag) === 0) used.splice(k, 1); pick = h % close.length; }
+    used.push(tag + pick);
+    return { ruling: yes ? "ACQUITTED" : "GUILTY", score: score, charge: "“" + clipOf(trimmed) + "”", line: setup + " " + close[pick], excuse: trimmed, cat: "~" + best.keys[0] + ":" + (x || acts[0]), twist: true, h: h };
   }
 
   function hash(s) {
@@ -1114,6 +1252,8 @@
       // the court has never heard this one: it gets a fair hearing once the charge is known (docketRule)
       return { needsSpot: true, ruling: "GUILTY", score: 0, charge: "\u201C" + clip + "\u201D", line: "", excuse: trimmed, text: text, h: h };
     }
+    var tw = twistOf(text, best, trimmed, h);
+    if (tw) return tw;
     return {
       ruling: best.ruling,
       score: believability(best.score, h),
@@ -1561,7 +1701,7 @@
       result.ruling = "GUILTY";
       result.score = 4 + (h % 6);
       result.line = "This court heard that excuse on case " + (used + 1) + " of this very docket. It did not improve with reheating. Guilty. Sentence: a fresh excuse for every charge.";
-    } else if (!angle && result.cat && c.no && c.no[result.cat]) {
+    } else if (!angle && !result.twist && result.cat && c.no && c.no[result.cat]) {
       result.ruling = "GUILTY";
       result.score = 9 + (h % 10);
       result.line = c.no[result.cat];
